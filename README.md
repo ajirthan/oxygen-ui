@@ -17,6 +17,22 @@ Before you begin, ensure you have the following installed:
 - [Node.js](https://nodejs.org/) (v24 or newer recommended)
 - [pnpm](https://pnpm.io/) (v10 or newer recommended)
 
+# Quick Start with the CLI
+
+The fastest way to get started is the [Oxygen UI CLI](./packages/oxygen-ui-cli/README.md):
+
+```bash
+# Scaffold a new Vite + React + TypeScript app with Oxygen UI preconfigured
+npx @wso2/oxygen-ui-cli create my-app
+
+# Or set up Oxygen UI in an existing React app
+npx @wso2/oxygen-ui-cli init
+```
+
+The CLI can also generate page templates (`add login`, `add dashboard`, ...), scaffold
+custom themes (`theme brand`), and diagnose setup issues (`doctor`). See the
+[CLI README](./packages/oxygen-ui-cli/README.md) for all commands.
+
 # Usage Example
 
 ## Installing Oxygen UI
@@ -126,6 +142,7 @@ oxygen-ui/
 ├── packages/
 │   ├── oxygen-ui/                        # Main Oxygen-UI component library (@wso2/oxygen-ui)
 │   ├── oxygen-ui-charts-react/           # Oxygen-UI charts library (@wso2/oxygen-ui-charts-react)
+│   ├── oxygen-ui-cli/                    # Oxygen-UI command line interface (@wso2/oxygen-ui-cli)
 │   ├── oxygen-ui-docs/                   # Oxygen-UI docs - storybook
 │   ├── oxygen-ui-icons-react/            # Oxygen-UI icons library (@wso2/oxygen-ui-icons-react) 
 │   └── eslint-plugin-oxygen-ui/          # ESLint plugin for enforcing Oxygen-UI import patterns

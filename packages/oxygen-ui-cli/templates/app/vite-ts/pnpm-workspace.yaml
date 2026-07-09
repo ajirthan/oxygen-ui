@@ -1,0 +1,10 @@
+# Allow native toolchain dependencies to run their postinstall build scripts.
+# pnpm v10 reads onlyBuiltDependencies; pnpm v11+ reads allowBuilds.
+# This file is only used when installing with pnpm.
+allowBuilds:
+  esbuild: true
+  "@swc/core": true
+
+onlyBuiltDependencies:
+  - esbuild
+  - "@swc/core"

@@ -549,6 +549,8 @@ Available Skills (Claude mode only):
   /oxygen-layout     Generate app layouts with AppShell
   /oxygen-form       Generate forms with validation
   /oxygen-migrate    Migrate existing MUI code
+
+Looking for scaffolding, page templates, or diagnostics? Try the dedicated CLI: npx @wso2/oxygen-ui-cli help
 `);
 }
 

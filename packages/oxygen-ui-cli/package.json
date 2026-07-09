@@ -1,0 +1,75 @@
+{
+  "name": "@wso2/oxygen-ui-cli",
+  "version": "0.0.0",
+  "description": "Command line interface for the WSO2 Oxygen UI design system - scaffold apps, wire up theming, generate pages and themes, and diagnose setup issues.",
+  "type": "module",
+  "bin": {
+    "oxygen-ui-cli": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "package.json",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "pnpm clean && tsc --noEmit && node esbuild.config.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "clean": "rimraf dist",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "wso2",
+    "oxygen-ui",
+    "cli",
+    "design-system",
+    "scaffold",
+    "generator",
+    "react",
+    "material-ui"
+  ],
+  "author": "WSO2 LLC",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wso2/oxygen-ui.git",
+    "directory": "packages/oxygen-ui-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/wso2/oxygen-ui/issues"
+  },
+  "homepage": "https://github.com/wso2/oxygen-ui#readme",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@clack/prompts": "^1.7.0",
+    "@eslint/js": "catalog:",
+    "@types/node": "catalog:",
+    "@types/semver": "^7.7.1",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "commander": "^15.0.0",
+    "esbuild": "catalog:",
+    "eslint": "catalog:",
+    "picocolors": "^1.1.1",
+    "rimraf": "catalog:",
+    "semver": "^7.8.5",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ]
+      }
+    }
+  }
+}
