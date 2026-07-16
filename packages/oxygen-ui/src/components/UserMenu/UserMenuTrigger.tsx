@@ -86,14 +86,17 @@ const StyledNameText = styled('span', {
  * UserMenu.Trigger - Avatar button that opens the menu.
  */
 export const UserMenuTrigger = React.forwardRef<HTMLButtonElement, UserMenuTriggerProps>(
-  function UserMenuTrigger({ name, avatar, showName = false, ...props }, ref) {
+  function UserMenuTrigger({ name, avatar, showName = false, onClick, ...props }, ref) {
     const { open, handleOpen } = useUserMenu();
 
     return (
       <Tooltip title="Account">
         <StyledTrigger
           ref={ref}
-          onClick={handleOpen}
+          onClick={(event) => {
+            handleOpen(event);
+            onClick?.(event);
+          }}
           size="small"
           showName={showName}
           aria-label={showName ? name : 'Account'}
