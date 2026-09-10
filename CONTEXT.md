@@ -23,3 +23,19 @@ _Avoid_: barrel (except when talking to the bundler)
 **Oxygen subpath**:
 A published `@wso2/oxygen-ui/<name>` entry that is not the Published entry. A consumer opts in; `Table` / `Button` do not evaluate it. The MUI X surfaces are `data-grid`, `date-pickers`, and `tree-view`. Date adapters are their own subpaths under `date-pickers/` (for example `date-pickers/AdapterDateFns`).
 _Avoid_: MUI import, barrel re-export, `DataGrid` namespace
+
+**Documented exception**:
+A standing deviation from a success criterion that Oxygen does not intend to remove, recorded with the reason it stands. Usually something Oxygen inherits rather than authors. Permanent until the reason changes.
+_Avoid_: known issue, bug, todo
+
+**Deferred red**:
+A real failure the accessibility gate knowingly skips for now. Distinct from a Documented exception: it is meant to be fixed, so it is only legitimate while a Follow-up issue owns it.
+_Avoid_: exception, ignored failure, suppressed test
+
+**Follow-up issue**:
+The tracker entry that owns work deliberately left out of the current pass. What makes a Deferred red legitimate rather than hidden.
+_Avoid_: TODO comment, backlog note
+
+**Verification scenario**:
+A named situation checked by hand, for a criterion no automated rule can decide. Recorded with its outcome, so "verified" means someone looked at something specific rather than at everything.
+_Avoid_: manual test, QA pass, audit
