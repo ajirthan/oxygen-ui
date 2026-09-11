@@ -163,12 +163,18 @@ const preview = {
 
   parameters: {
     a11y: {
-      // Run axe against the WCAG 2.1 AA ruleset (plus its A prerequisites).
-      config: {},
+      // Run axe against the WCAG 2.2 AA ruleset (plus its A prerequisites).
+      //
+      // `target-size` (WCAG 2.5.8) is the only rule axe tags `wcag22aa`, and it
+      // ships disabled by default, so adding the tag on its own would leave the
+      // gate inert. It has to be enabled explicitly.
+      config: {
+        rules: [{id: 'target-size', enabled: true}],
+      },
       options: {
         runOnly: {
           type: 'tag',
-          values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'],
+          values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'],
         },
       },
       // Violations fail the story when run via the test-runner / CI.
