@@ -184,6 +184,12 @@ const TemplatePreview = ({ template }: { template: TemplateCard }) => {
             </Link>
           )}
           <Box
+            // The card shows a scaled-down clone of a whole template as a
+            // thumbnail. `pointerEvents: 'none'` stops the mouse but not the
+            // keyboard, so without `inert` every control in every clone stays
+            // in the tab order, and each one measures under the WCAG 2.5.8
+            // 24px minimum purely because of the 0.4 scale.
+            inert
             sx={{
               width: '250%', /* 100 / 0.4 */
               transform: 'scale(0.4)',
