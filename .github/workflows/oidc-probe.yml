@@ -1,0 +1,87 @@
+# -------------------------------------------------------------------------------------
+#
+# Copyright (c) 2026, WSO2 LLC. (https://www.wso2.com).
+#
+# WSO2 LLC. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+# --------------------------------------------------------------------------------------
+
+# Fork-only probe. Publishes @ajirthan_wso2/oui-oidc-probe with the same
+# setup-node and auth-token removal as Release. Do not merge to wso2/oxygen-ui.
+
+name: OIDC publish probe
+
+on:
+  push:
+    branches: [probe/oidc]
+    paths:
+      - 'probe/oui-oidc-probe/**'
+      - '.github/workflows/oidc-probe.yml'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish probe
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.5.1
+          run_install: false
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Remove npm auth token so publish uses OIDC
+        run: |
+          npmrc="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+          if [ -f "$npmrc" ]; then
+            sed -i '/_authToken=/d' "$npmrc"
+          fi
+          if [ -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" ]; then
+            echo "OIDC request token is present"
+          else
+            echo "OIDC request token is absent"
+          fi
+
+      - name: Stage probe outside the workspace
+        run: |
+          rm -rf "$RUNNER_TEMP/oui-oidc-probe"
+          cp -R probe/oui-oidc-probe "$RUNNER_TEMP/oui-oidc-probe"
+
+      - name: Publish with pnpm
+        id: pnpm
+        continue-on-error: true
+        working-directory: ${{ runner.temp }}/oui-oidc-probe
+        run: pnpm publish --no-git-checks --access public
+
+      - name: Publish with npm
+        if: steps.pnpm.outcome == 'failure'
+        working-directory: ${{ runner.temp }}/oui-oidc-probe
+        run: npm publish --access public
+
+      - name: Fail when the pnpm publish path failed
+        if: steps.pnpm.outcome == 'failure'
+        run: exit 1

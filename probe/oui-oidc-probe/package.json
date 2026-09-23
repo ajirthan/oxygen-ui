@@ -1,0 +1,13 @@
+{
+  "name": "@ajirthan_wso2/oui-oidc-probe",
+  "version": "0.0.2",
+  "description": "Fork probe for npm trusted publishing. Not an Oxygen UI package.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajirthan/oxygen-ui.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
