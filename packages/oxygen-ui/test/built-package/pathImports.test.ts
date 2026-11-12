@@ -41,8 +41,6 @@ const componentFolders = readdirSync(join(packageRoot, 'src/components'), { with
   .filter(entry => entry.isDirectory() && existsSync(join(packageRoot, 'src/components', entry.name, 'index.ts')))
   .map(entry => entry.name);
 
-const specifierOf = (entry: MapEntry): string => entry.path;
-
 describe('path imports of Oxygen components', { timeout: 120_000 }, () => {
   let installed: InstalledPackage;
 
@@ -85,7 +83,7 @@ describe('path imports of Oxygen components', { timeout: 120_000 }, () => {
 
   it('gives every name in the map as the same object from its path as from the barrel', async () => {
     const valueNames = Object.keys(nameToPathMap).filter(name => !nameToPathMap[name].typeOnly);
-    const paths = [...new Set(valueNames.map(name => specifierOf(nameToPathMap[name])))];
+    const paths = [...new Set(valueNames.map(name => nameToPathMap[name].path))];
     const importOfPath = (path: string) => `path_${paths.indexOf(path)}`;
 
     const app = await installed.evaluate(`
