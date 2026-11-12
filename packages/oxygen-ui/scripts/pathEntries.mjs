@@ -33,8 +33,14 @@ const componentsBesideTheirFolder = ['SearchBar/SearchBarWithAdvancedFilter'];
 /** `esm` is Material UI's build output, not a path. */
 const materialFoldersWithoutAMaterialPath = ['esm'];
 
-/** Names of the MUI X packages on the barrel. They have no path. */
-const muiXNamesOnTheBarrel = ['DataGrid', 'DatePickers', 'TreeView', 'AdapterDateFns'];
+/** A lower-case path passes a whole MUI X package through by name; PascalCase paths name one component. */
+const muiXPackages = [
+  { name: 'data-grid', specifier: '@mui/x-data-grid' },
+  { name: 'date-pickers', specifier: '@mui/x-date-pickers' },
+  { name: 'tree-view', specifier: '@mui/x-tree-view' },
+];
+
+const dateAdapterFolderExcludingBases = /^Adapter(?!.*Base$)/;
 
 /** What an Oxygen path carries besides what its module exports: a default export that the barrel names, and types. */
 const additionsToOxygenPaths = {
@@ -117,6 +123,15 @@ function describeMaterialPaths(oxygenPaths) {
     .map(entry => entry.name)
     .filter(name => !materialFoldersWithoutAMaterialPath.includes(name))
     .map(name => ({ name, specifier: `${materialPackage}/${name}`, replacedByOxygen: oxygenNames.has(name) }));
+}
+
+/** One path under `date-pickers` for each first-party date adapter, discovered from the installed date pickers. */
+function describeDateAdapterPaths() {
+  const pickersRoot = path.dirname(createRequire(import.meta.url).resolve('@mui/x-date-pickers/package.json'));
+
+  return readdirSync(pickersRoot, { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && dateAdapterFolderExcludingBases.test(entry.name) && existsSync(path.join(pickersRoot, entry.name, 'index.d.ts')))
+    .map(entry => ({ name: `date-pickers/${entry.name}`, specifier: `@mui/x-date-pickers/${entry.name}` }));
 }
 
 function openProgram(rootFiles, barrelModule) {
@@ -243,11 +258,13 @@ export function describePathEntries() {
   const oxygen = describeOxygenPaths();
   const materials = describeMaterialPaths(oxygen);
   const additionModules = Object.values(oxygenAdditionsToMaterialPaths).flat().map(({ moduleId }) => sourceFileOf(moduleId));
+  const muiX = [...muiXPackages, ...describeDateAdapterPaths()];
   const program = openProgram(
     [
       barrelModule,
       ...oxygen.map(oxygenPath => oxygenPath.source),
       ...materials.map(material => material.specifier),
+      ...muiX.map(({ specifier }) => specifier),
       materialPackage,
       ...Object.values(additionsToOxygenPaths).flat().map(({ from }) => from),
       ...additionModules,
@@ -316,7 +333,13 @@ export function describePathEntries() {
       return { name: material.name, clauses, exports, module: material.specifier };
     });
 
-  const published = [...oxygenPaths, ...materialPaths];
+  const muiXPaths = muiX.map(({ name, specifier }) => {
+    const exports = exportsByName(specifier);
+
+    return { name, clauses: [{ from: specifier, star: true }], exports, module: specifier };
+  });
+
+  const published = [...oxygenPaths, ...materialPaths, ...muiXPaths];
 
   return {
     sources: oxygen.map(oxygenPath => oxygenPath.source),
@@ -327,7 +350,7 @@ export function describePathEntries() {
     })),
     nameToPathMap: describeNameToPathMap(
       published,
-      exportsOf(barrelModule).filter(symbol => !muiXNamesOnTheBarrel.includes(symbol.name)),
+      exportsOf(barrelModule),
       program,
     ),
   };
@@ -340,6 +363,7 @@ export function writePathEntries({ paths, nameToPathMap }) {
   mkdirSync(folder, { recursive: true });
 
   for (const entry of paths) {
+    mkdirSync(path.dirname(path.join(folder, entry.name)), { recursive: true });
     writeFileSync(path.join(folder, `${entry.name}.js`), entry.javascript);
     writeFileSync(path.join(folder, `${entry.name}.d.ts`), entry.declaration);
   }

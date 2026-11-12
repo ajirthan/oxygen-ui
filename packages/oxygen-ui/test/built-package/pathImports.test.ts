@@ -65,9 +65,18 @@ const themes = [
   'WSO2Theme',
 ];
 
+const muiXPaths = [
+  'data-grid',
+  'date-pickers',
+  'tree-view',
+  ...['AdapterDateFns', 'AdapterDateFnsJalali', 'AdapterDateFnsJalaliV2', 'AdapterDateFnsV2', 'AdapterDayjs', 'AdapterLuxon', 'AdapterMoment', 'AdapterMomentHijri', 'AdapterMomentJalaali'].map(
+    adapter => `date-pickers/${adapter}`,
+  ),
+];
+
 const pathsOfOneName = ['OxygenUIThemeProvider', 'Layout', 'ParticleBackground', 'version'];
 
-const publishedPaths = globSync('paths/*.js', { cwd: join(packageRoot, 'dist') }).map(file => file.replace(/^paths\/(.*)\.js$/, '$1'));
+const publishedPaths = globSync('paths/**/*.js', { cwd: join(packageRoot, 'dist') }).map(file => file.replace(/^paths\/(.*)\.js$/, '$1'));
 
 describe('path imports', { timeout: 120_000 }, () => {
   let installed: InstalledPackage;
@@ -112,6 +121,7 @@ describe('path imports', { timeout: 120_000 }, () => {
       ...hooks,
       ...themes,
       ...pathsOfOneName,
+      ...muiXPaths,
     ]);
 
     expect([...publishedPaths].sort()).toEqual([...expected].sort());
@@ -160,10 +170,9 @@ describe('path imports', { timeout: 120_000 }, () => {
     `);
     // Material UI exports these at run time and leaves them out of its declarations, so no import of them type checks.
     const withoutDeclarations = ['FormLabelRoot', 'createTransitions', 'experimental_extendTheme', 'private_createMixins', 'usePagination'];
-    const withMuiXPaths = ['DataGrid', 'DatePickers', 'TreeView', 'AdapterDateFns'];
 
     expect(
-      (app.names as string[]).filter(name => ![...withoutDeclarations, ...withMuiXPaths].includes(name) && !(name in nameToPathMap)),
+      (app.names as string[]).filter(name => !withoutDeclarations.includes(name) && !(name in nameToPathMap)),
     ).toEqual([]);
   });
 
@@ -177,6 +186,51 @@ describe('path imports', { timeout: 120_000 }, () => {
       expect(pathOf(name), name).toBe('@wso2/oxygen-ui/OxygenUIThemeProvider');
     }
     expect(pathOf('major')).toBe('@wso2/oxygen-ui/version');
+  });
+
+  it('maps the MUI X namespaces to the lower-case paths, and the adapter to its path under date-pickers', () => {
+    expect(nameToPathMap.DataGrid).toEqual({ path: '@wso2/oxygen-ui/data-grid', kind: 'namespace', typeOnly: false });
+    expect(nameToPathMap.DatePickers).toEqual({ path: '@wso2/oxygen-ui/date-pickers', kind: 'namespace', typeOnly: false });
+    expect(nameToPathMap.TreeView).toEqual({ path: '@wso2/oxygen-ui/tree-view', kind: 'namespace', typeOnly: false });
+    expect(nameToPathMap.AdapterDateFns).toEqual({ path: '@wso2/oxygen-ui/date-pickers/AdapterDateFns', kind: 'named', typeOnly: false });
+  });
+
+  it('re-exports every named export of its MUI X package from each lower-case path', async () => {
+    const app = await installed.evaluate(`
+      import * as dataGrid from '@wso2/oxygen-ui/data-grid';
+      import * as datePickers from '@wso2/oxygen-ui/date-pickers';
+      import * as treeView from '@wso2/oxygen-ui/tree-view';
+      import * as muiDataGrid from '@mui/x-data-grid';
+      import * as muiDatePickers from '@mui/x-date-pickers';
+      import * as muiTreeView from '@mui/x-tree-view';
+      import { AdapterDateFns } from '@wso2/oxygen-ui/date-pickers/AdapterDateFns';
+      import { AdapterDateFns as MuiAdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+      import { AdapterDateFns as FromTheBarrel } from '@wso2/oxygen-ui';
+      export const pairs = { dataGrid: [dataGrid, muiDataGrid], datePickers: [datePickers, muiDatePickers], treeView: [treeView, muiTreeView] };
+      export { AdapterDateFns, MuiAdapterDateFns, FromTheBarrel };
+    `);
+
+    for (const [name, [fromPath, fromMui]] of Object.entries(app.pairs as Record<string, [object, object]>)) {
+      expect(Object.keys(fromPath).sort(), name).toEqual(Object.keys(fromMui).sort());
+      expect(Object.keys(fromPath).length, name).toBeGreaterThan(0);
+      for (const member of Object.keys(fromMui)) {
+        expect((fromPath as Record<string, unknown>)[member], `${name}.${member}`).toBe((fromMui as Record<string, unknown>)[member]);
+      }
+    }
+    expect(app.AdapterDateFns).toBe(app.MuiAdapterDateFns);
+    expect(app.AdapterDateFns).toBe(app.FromTheBarrel);
+  });
+
+  it('keeps the MUI X namespaces and AdapterDateFns on the barrel', async () => {
+    const app = await installed.evaluate(`
+      import { DataGrid, DatePickers, TreeView, AdapterDateFns } from '@wso2/oxygen-ui';
+      export { DataGrid, DatePickers, TreeView, AdapterDateFns };
+    `);
+
+    expect(app.DataGrid).toHaveProperty('DataGrid');
+    expect(app.DatePickers).toHaveProperty('DatePicker');
+    expect(app.TreeView).toHaveProperty('SimpleTreeView');
+    expect(typeof app.AdapterDateFns).toBe('function');
   });
 
   it('gives a theme path the theme as its default export, and the provider path the provider, with what goes with it', async () => {
