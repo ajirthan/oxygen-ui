@@ -44,7 +44,7 @@ const componentFolders = readdirSync(join(packageRoot, 'src/components'), { with
 
 const materialRoot = dirname(createRequire(import.meta.url).resolve('@mui/material/package.json'));
 
-// `version` is the Oxygen version, and its path comes with the other paths that are not Material UI's.
+// `version` is the Oxygen version on the barrel, not Material UI's, and `esm` is Material UI's build output.
 const materialPaths = readdirSync(materialRoot, { withFileTypes: true })
   .filter(entry => entry.isDirectory() && existsSync(join(materialRoot, entry.name, 'index.d.ts')))
   .map(entry => entry.name)
@@ -86,10 +86,11 @@ describe('path imports', { timeout: 120_000 }, () => {
     expect(app.PathTextField).not.toBe(app.MaterialTextField);
   });
 
-  it('has a path for every Oxygen component folder, one for SearchBarWithAdvancedFilter, and one for every Material UI path', () => {
-    expect(publishedPaths.sort()).toEqual(
-      expect.arrayContaining([...componentFolders, 'SearchBarWithAdvancedFilter', ...materialPaths]),
-    );
+  it('has a path for every Oxygen component folder, one for SearchBarWithAdvancedFilter, and one for every Material UI path, and no other', () => {
+    // An Oxygen component folder and a Material UI path of one name are one path, the Oxygen one.
+    const expected = new Set([...componentFolders, 'SearchBarWithAdvancedFilter', ...materialPaths]);
+
+    expect([...publishedPaths].sort()).toEqual([...expected].sort());
   });
 
   it('gives every name in the map as the same object from its path as from the barrel', async () => {
@@ -128,7 +129,6 @@ describe('path imports', { timeout: 120_000 }, () => {
     }
   });
 
-  // The version path, which gets the names of Material UI's version module, comes with the paths that are not Material UI's.
   it('has a map entry for every value Material UI exports', async () => {
     const app = await installed.evaluate(`
       import * as material from '@mui/material';

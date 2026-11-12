@@ -30,8 +30,8 @@ const materialPackage = '@mui/material';
 /** Components that live inside another component's folder but are public in their own right. */
 const componentsBesideTheirFolder = ['SearchBar/SearchBarWithAdvancedFilter'];
 
-/** Material UI paths that Oxygen paths of the same name replace outright, because Oxygen defines the name. */
-const materialPathsReplacedByOxygenPaths = ['version', 'esm'];
+/** `version` is the Oxygen version on the barrel, not Material UI's, and `esm` is Material UI's build output, not a path. */
+const materialFoldersWithoutAMaterialPath = ['version', 'esm'];
 
 /** What Oxygen adds to the Material UI path of the same name: where it is defined, and the names. */
 const oxygenAdditionsToMaterialPaths = {
@@ -84,7 +84,7 @@ function describeMaterialPaths(componentPaths) {
   return readdirSync(materialRoot, { withFileTypes: true })
     .filter(entry => entry.isDirectory() && existsSync(path.join(materialRoot, entry.name, 'index.d.ts')))
     .map(entry => entry.name)
-    .filter(name => !materialPathsReplacedByOxygenPaths.includes(name))
+    .filter(name => !materialFoldersWithoutAMaterialPath.includes(name))
     .map(name => ({ name, specifier: `${materialPackage}/${name}`, replacedByOxygen: oxygenNames.has(name) }));
 }
 
@@ -283,8 +283,7 @@ export function describePathEntries() {
     ...materialNamespacesOnTheBarrel,
   ]);
 
-  // The version path, with the names of Material UI's version module, is not built yet.
-  for (const name of [...materialPathsReplacedByOxygenPaths, ...exportsOf(`${materialPackage}/version`).map(symbol => symbol.name)]) {
+  for (const name of [...materialFoldersWithoutAMaterialPath, ...exportsOf(`${materialPackage}/version`).map(symbol => symbol.name)]) {
     mapped.delete(name);
   }
 
