@@ -52,9 +52,6 @@ function describeComponentPaths() {
   return [...folders, ...beside].map(component => ({ ...component, source: sourceFileOf(component.moduleId) }));
 }
 
-const resolveAlias = (checker, symbol) =>
-  symbol.flags & ts.SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
-
 function openProgram(rootFiles) {
   const config = ts.getParsedCommandLineOfConfigFile('tsconfig.json', {}, {
     ...ts.sys,
@@ -121,7 +118,8 @@ export function describePathEntries() {
   };
 }
 
-export function writePathEntries({ paths, nameToPathMap }, distribution = path.resolve('dist')) {
+export function writePathEntries({ paths, nameToPathMap }) {
+  const distribution = path.resolve('dist');
   const folder = path.join(distribution, publishedFolder);
 
   mkdirSync(folder, { recursive: true });
