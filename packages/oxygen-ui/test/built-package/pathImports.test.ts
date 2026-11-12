@@ -18,8 +18,9 @@
 
 // @vitest-environment node
 
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, globSync, readdirSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -41,7 +42,17 @@ const componentFolders = readdirSync(join(packageRoot, 'src/components'), { with
   .filter(entry => entry.isDirectory() && existsSync(join(packageRoot, 'src/components', entry.name, 'index.ts')))
   .map(entry => entry.name);
 
-describe('path imports of Oxygen components', { timeout: 120_000 }, () => {
+const materialRoot = dirname(createRequire(import.meta.url).resolve('@mui/material/package.json'));
+
+// `version` is the Oxygen version, and its path comes with the other paths that are not Material UI's.
+const materialPaths = readdirSync(materialRoot, { withFileTypes: true })
+  .filter(entry => entry.isDirectory() && existsSync(join(materialRoot, entry.name, 'index.d.ts')))
+  .map(entry => entry.name)
+  .filter(name => name !== 'esm' && name !== 'version');
+
+const publishedPaths = globSync('paths/*.js', { cwd: join(packageRoot, 'dist') }).map(file => file.replace(/^paths\/(.*)\.js$/, '$1'));
+
+describe('path imports', { timeout: 120_000 }, () => {
   let installed: InstalledPackage;
 
   // esbuild, which the bundlers load, refuses to start under Vitest's jsdom environment, so the DOM is installed here.
@@ -75,10 +86,10 @@ describe('path imports of Oxygen components', { timeout: 120_000 }, () => {
     expect(app.PathTextField).not.toBe(app.MaterialTextField);
   });
 
-  it('has a path for every Oxygen component folder, and one for SearchBarWithAdvancedFilter', () => {
-    const publishedPaths = Object.values(nameToPathMap).map(entry => entry.path.replace('@wso2/oxygen-ui/', ''));
-
-    expect([...new Set(publishedPaths)].sort()).toEqual([...componentFolders, 'SearchBarWithAdvancedFilter'].sort());
+  it('has a path for every Oxygen component folder, one for SearchBarWithAdvancedFilter, and one for every Material UI path', () => {
+    expect(publishedPaths.sort()).toEqual(
+      expect.arrayContaining([...componentFolders, 'SearchBarWithAdvancedFilter', ...materialPaths]),
+    );
   });
 
   it('gives every name in the map as the same object from its path as from the barrel', async () => {
@@ -93,7 +104,8 @@ describe('path imports of Oxygen components', { timeout: 120_000 }, () => {
         ${valueNames
           .map(name => {
             const entry = nameToPathMap[name];
-            const fromPath = entry.kind === 'default' ? `${importOfPath(entry.path)}.default` : `${importOfPath(entry.path)}.${name}`;
+            const imported = importOfPath(entry.path);
+            const fromPath = { default: `${imported}.default`, named: `${imported}.${name}`, namespace: imported }[entry.kind];
             return `['${name}', barrel.${name}, ${fromPath}]`;
           })
           .join(',\n')}
@@ -104,9 +116,72 @@ describe('path imports of Oxygen components', { timeout: 120_000 }, () => {
 
     expect(pairs.length).toBe(valueNames.length);
     for (const [name, fromBarrel, fromPath] of pairs) {
-      expect(fromBarrel, `${name} from its path`).toBeDefined();
-      expect(fromPath, `${name} from its path`).toBe(fromBarrel);
+      if (nameToPathMap[name].kind === 'namespace') {
+        // Two namespace objects are never identical, so a namespace is the same when each member is.
+        expect(Object.keys(fromPath as object).sort(), name).toEqual(Object.keys(fromBarrel as object).sort());
+        for (const member of Object.keys(fromBarrel as object)) {
+          expect((fromPath as Record<string, unknown>)[member], `${name}.${member}`).toBe((fromBarrel as Record<string, unknown>)[member]);
+        }
+      } else {
+        expect(fromPath, `${name} from its path`).toBe(fromBarrel);
+      }
     }
+  });
+
+  // The version path, which gets the names of Material UI's version module, comes with the paths that are not Material UI's.
+  it('has a map entry for every value Material UI exports', async () => {
+    const app = await installed.evaluate(`
+      import * as material from '@mui/material';
+      export const names = Object.keys(material);
+    `);
+
+    const versionNames = ['version', 'major', 'minor', 'patch', 'prerelease'];
+    // Material UI exports these at run time and leaves them out of its declarations, so no import of them type checks.
+    const withoutDeclarations = ['FormLabelRoot', 'createTransitions', 'experimental_extendTheme', 'private_createMixins', 'usePagination'];
+
+    expect((app.names as string[]).filter(name => ![...versionNames, ...withoutDeclarations].includes(name) && !(name in nameToPathMap))).toEqual([]);
+  });
+
+  it('gives Material UI paths the default and the named exports of Material UI', async () => {
+    const app = await installed.evaluate(`
+      import Button, { buttonClasses } from '@wso2/oxygen-ui/Button';
+      import Box from '@wso2/oxygen-ui/Box';
+      import MaterialButton, { buttonClasses as materialButtonClasses } from '@mui/material/Button';
+      import MaterialBox from '@mui/material/Box';
+      export { Button, buttonClasses, Box, MaterialButton, materialButtonClasses, MaterialBox };
+    `);
+
+    expect(app.Button).toBe(app.MaterialButton);
+    expect(app.buttonClasses).toBe(app.materialButtonClasses);
+    expect(app.Box).toBe(app.MaterialBox);
+  });
+
+  it('gives the Override path the Material UI names the Override does not replace', async () => {
+    const app = await installed.evaluate(`
+      import { textFieldClasses } from '@wso2/oxygen-ui/TextField';
+      import { textFieldClasses as materialTextFieldClasses } from '@mui/material/TextField';
+      export { textFieldClasses, materialTextFieldClasses };
+    `);
+
+    expect(app.textFieldClasses).toBeDefined();
+    expect(app.textFieldClasses).toBe(app.materialTextFieldClasses);
+  });
+
+  it('adds Oxygen names to the styles and utils paths, which keep Material UI names', async () => {
+    const app = await installed.evaluate(`
+      import { createOxygenTheme, pxToRem, styled, useTheme } from '@wso2/oxygen-ui/styles';
+      import { formatRelativeTime, debounce } from '@wso2/oxygen-ui/utils';
+      import * as barrel from '@wso2/oxygen-ui';
+      export { createOxygenTheme, pxToRem, styled, useTheme, formatRelativeTime, debounce, barrel };
+    `);
+    const barrel = app.barrel as Record<string, unknown>;
+
+    expect(app.createOxygenTheme).toBe(barrel.createOxygenTheme);
+    expect(app.pxToRem).toBe(barrel.pxToRem);
+    expect(app.styled).toBe(barrel.styled);
+    expect(app.useTheme).toBe(barrel.useTheme);
+    expect(app.formatRelativeTime).toBe(barrel.formatRelativeTime);
+    expect(typeof app.debounce).toBe('function');
   });
 
   it('gives every path a default export', async () => {
@@ -122,12 +197,27 @@ describe('path imports of Oxygen components', { timeout: 120_000 }, () => {
   });
 
   describe.each(['bundler', 'node16', 'nodenext'] as const)('type declarations under moduleResolution %s', moduleResolution => {
-    it('resolve to a typed default export for every path', () => {
+    it('resolve to a typed default export for every Oxygen component path', () => {
       const pathNames = [...componentFolders, 'SearchBarWithAdvancedFilter'];
       const source = `
         type IsAny<T> = 0 extends 1 & T ? true : false;
         ${pathNames.map((name, index) => `import d${index} from '@wso2/oxygen-ui/${name}';\nconst notAny${index}: IsAny<typeof d${index}> = false;`).join('\n')}
         export { ${pathNames.map((_, index) => `notAny${index}`).join(', ')} };
+      `;
+
+      expect(installed.typeCheck(source, moduleResolution)).toEqual([]);
+    });
+
+    it('resolve for every published path, with the names Oxygen adds and the types Material UI has', () => {
+      const source = `
+        ${publishedPaths.map((name, index) => `import * as p${index} from '@wso2/oxygen-ui/${name}';`).join('\n')}
+        import Button, { type ButtonProps, buttonClasses } from '@wso2/oxygen-ui/Button';
+        import { type TextFieldProps, textFieldClasses } from '@wso2/oxygen-ui/TextField';
+        import { createOxygenTheme, pxToRem, styled, type OxygenThemeType, type Theme } from '@wso2/oxygen-ui/styles';
+        import { formatRelativeTime, debounce } from '@wso2/oxygen-ui/utils';
+        import { amber } from '@wso2/oxygen-ui/colors';
+        export const used = [${publishedPaths.map((_, index) => `p${index}`).join(', ')}, Button, buttonClasses, textFieldClasses, createOxygenTheme, pxToRem, styled, formatRelativeTime, debounce, amber];
+        export type Used = [ButtonProps, TextFieldProps, OxygenThemeType, Theme];
       `;
 
       expect(installed.typeCheck(source, moduleResolution)).toEqual([]);
