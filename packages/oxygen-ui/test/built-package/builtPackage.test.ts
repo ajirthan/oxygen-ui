@@ -67,6 +67,11 @@ const pathImportRows = [
 
 const pathImportGzipAllowanceOverBarrel = 2048;
 
+const themePathRows = [
+  { name: 'AcrylicOrangeTheme', holds: ['Inter'] as Marker[] },
+  { name: 'ChoreoLabsTheme', holds: ['Inter', 'Sora'] as Marker[] },
+];
+
 describe('built package', { timeout: 60_000 }, () => {
   let installed: InstalledPackage;
   const measured: { app: string; bundler: Bundler; gzipBytes: number; holds: string }[] = [];
@@ -101,6 +106,18 @@ describe('built package', { timeout: 60_000 }, () => {
       measured.push({ app: `${row.name} by path`, bundler, gzipBytes: byPath.gzipBytes, holds: byPath.markers.join(', ') });
 
       expect.soft(byPath.markers).toEqual([]);
+      expect.soft(byPath.gzipBytes).toBeLessThanOrEqual(byBarrel.gzipBytes + pathImportGzipAllowanceOverBarrel);
+    });
+  });
+
+  describe.each(themePathRows)('app importing the theme $name by path', row => {
+    it.each(bundlers)('bundled with %s holds the fonts of the theme and nothing of another theme', async bundler => {
+      const byPath = await installed.bundle(`import ${row.name} from '@wso2/oxygen-ui/${row.name}';\nexport { ${row.name} };\n`, bundler);
+      const byBarrel = await installed.bundle(barrelImport(row.name), bundler);
+
+      measured.push({ app: `${row.name} by path`, bundler, gzipBytes: byPath.gzipBytes, holds: byPath.markers.join(', ') });
+
+      expect.soft([...byPath.markers].sort()).toEqual([...row.holds].sort());
       expect.soft(byPath.gzipBytes).toBeLessThanOrEqual(byBarrel.gzipBytes + pathImportGzipAllowanceOverBarrel);
     });
   });
