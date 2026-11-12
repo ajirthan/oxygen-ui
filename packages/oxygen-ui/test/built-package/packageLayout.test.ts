@@ -66,7 +66,7 @@ describe('built package layout', () => {
   it('publishes in the folder of path entries only the entries', () => {
     const entries = globSync('paths/**', { cwd: distribution }).filter(file => /\.[a-z.]+$/.test(file));
 
-    expect(entries.every(file => /^paths\/[A-Za-z0-9_-]+\.(js|d\.ts)$/.test(file))).toBe(true);
+    expect(entries.every(file => /^paths\/(date-pickers\/)?[A-Za-z0-9_-]+\.(js|d\.ts)$/.test(file))).toBe(true);
   });
 
   it('lists as side effects only modules that exist', () => {
