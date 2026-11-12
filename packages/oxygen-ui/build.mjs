@@ -21,6 +21,8 @@ import path from 'node:path';
 import { rolldown, watch } from 'rolldown';
 import esbuild from 'esbuild';
 import { inlineCSSFontsPlugin } from '@wso2/esbuild-plugin-inline-css-fonts';
+import { addExtensionsToDeclarations } from './scripts/declarationExtensions.mjs';
+import { describePathEntries, writePathEntries } from './scripts/pathEntries.mjs';
 
 const manifest = JSON.parse(readFileSync('./package.json', 'utf8'));
 const dependencyNames = [...Object.keys(manifest.dependencies ?? {}), ...Object.keys(manifest.peerDependencies ?? {})];
@@ -63,8 +65,10 @@ const fontStylesheetsAsInjectionModules = {
   },
 };
 
+const pathEntries = describePathEntries();
+
 const options = {
-  input: 'src/index.ts',
+  input: ['src/index.ts', ...pathEntries.sources],
   platform: 'browser',
   external,
   plugins: [fontStylesheetsAsInjectionModules],
@@ -79,6 +83,9 @@ const options = {
     entryFileNames: '[name].js',
   },
 };
+
+addExtensionsToDeclarations(path.resolve('dist'));
+writePathEntries(pathEntries);
 
 if (process.argv.includes('--watch')) {
   watch(options);

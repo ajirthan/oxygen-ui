@@ -10,6 +10,11 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./path-map.json": "./dist/path-map.json",
+    "./*": {
+      "types": "./dist/paths/*.d.ts",
+      "import": "./dist/paths/*.js"
     }
   },
   "bin": {
