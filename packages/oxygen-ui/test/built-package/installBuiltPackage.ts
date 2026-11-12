@@ -43,7 +43,9 @@ const markerCode = {
   'date pickers': 'MuiDateCalendar',
   'Tree View': 'MuiTreeItem',
   Prism: 'Prism.languages',
-  'font injection': 'data-oxygen-fonts',
+  // The font stylesheets name their face with a colon and a space; a theme names it in a font stack.
+  Inter: "font-family: 'Inter Variable'",
+  Sora: "font-family: 'Sora Variable'",
 } as const;
 
 export type Marker = keyof typeof markerCode;

@@ -46,16 +46,17 @@ const rows: Row[] = [
   { name: 'Header', app: barrelImport('Header'), holds: [], gzipBudget: { rolldown: 55822, vite: 57027 } },
   { name: 'AppShell', app: barrelImport('AppShell'), holds: [], gzipBudget: { rolldown: 28987, vite: 29466 } },
   { name: 'Button', app: barrelImport('Button'), holds: [], gzipBudget: { rolldown: 36975, vite: 37772 } },
-  { name: 'OxygenUIThemeProvider', app: barrelImport('OxygenUIThemeProvider'), holds: ['font injection'], gzipBudget: { rolldown: 339838, vite: 341590 } },
-  { name: 'only an Oxygen theme', app: barrelImport('AcrylicOrangeTheme'), holds: ['font injection'], gzipBudget: { rolldown: 321306, vite: 322007 } },
+  { name: 'OxygenUIThemeProvider', app: barrelImport('OxygenUIThemeProvider'), holds: ['Inter'], gzipBudget: { rolldown: 283886, vite: 285630 } },
+  { name: 'only an Oxygen theme', app: barrelImport('AcrylicOrangeTheme'), holds: ['Inter'], gzipBudget: { rolldown: 265390, vite: 266090 } },
+  { name: 'ChoreoLabsTheme', app: barrelImport('ChoreoLabsTheme'), holds: ['Inter', 'Sora'], gzipBudget: { rolldown: 325119, vite: 325738 } },
   {
     name: 'the seven imports of the issue',
     app: barrelImport('TextField', 'Select', 'Header', 'AppShell', 'Button', 'OxygenUIThemeProvider', 'Box'),
-    holds: ['font injection'],
-    gzipBudget: { rolldown: 393342, vite: 396304 },
+    holds: ['Inter'],
+    gzipBudget: { rolldown: 337397, vite: 340343 },
   },
   // Uses every marked library, so a marker that stops matching fails here and not silently in the rows above.
-  { name: 'every marked library', app: barrelImport('DataGrid', 'DatePickers', 'TreeView', 'CodeBlock', 'OxygenUIThemeProvider'), holds: ['Data Grid', 'date pickers', 'Tree View', 'Prism', 'font injection'], gzipBudget: { rolldown: 643651, vite: 653343 } },
+  { name: 'every marked library', app: barrelImport('DataGrid', 'DatePickers', 'TreeView', 'CodeBlock', 'OxygenUIThemeProvider'), holds: ['Data Grid', 'date pickers', 'Tree View', 'Prism', 'Inter'], gzipBudget: { rolldown: 587713, vite: 597444 } },
 ];
 
 describe('built package', { timeout: 60_000 }, () => {

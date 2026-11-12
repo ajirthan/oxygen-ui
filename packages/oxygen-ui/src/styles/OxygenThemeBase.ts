@@ -22,7 +22,6 @@ import { ChevronDown, X } from '@wso2/oxygen-ui-icons-react';
 import React from 'react';
 import { pxToRem } from '../utils';
 import '../fonts.css';
-import '../fonts-sora.css';
 
 // Define custom theme properties interface
 interface CustomThemeProperties {
