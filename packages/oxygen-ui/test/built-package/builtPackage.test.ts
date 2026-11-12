@@ -71,6 +71,7 @@ const pathImportGzipAllowanceOverBarrel = 2048;
 const themePathRows = [
   { name: 'AcrylicOrangeTheme', holds: ['Inter'] as Marker[] },
   { name: 'ChoreoLabsTheme', holds: ['Inter', 'Sora'] as Marker[] },
+  { name: 'HighContrastTheme', holds: ['Inter', 'HighContrastTheme'] as Marker[] },
 ];
 
 describe('built package', { timeout: 60_000 }, () => {

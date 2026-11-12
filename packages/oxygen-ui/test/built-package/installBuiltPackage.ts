@@ -45,6 +45,11 @@ const markerCode = {
   'Tree View': 'MuiTreeItem',
   Prism: 'Prism.languages',
   'font injection': 'data-oxygen-fonts',
+  // The font stylesheets name their face with a colon and a space; a theme names it in a font stack.
+  Inter: "font-family: 'Inter Variable'",
+  Sora: "font-family: 'Sora Variable'",
+  // A colour that only the high contrast theme sets, so it shows another theme's code in a bundle.
+  HighContrastTheme: '#FFD700',
 } as const;
 
 export type Marker = keyof typeof markerCode;

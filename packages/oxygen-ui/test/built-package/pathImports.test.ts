@@ -179,20 +179,21 @@ describe('path imports', { timeout: 120_000 }, () => {
     expect(pathOf('major')).toBe('@wso2/oxygen-ui/version');
   });
 
-  it('gives a theme path the theme as its default export, and no other theme with it', async () => {
+  it('gives a theme path the theme as its default export, and the provider path the provider, with what goes with it', async () => {
     const app = await installed.evaluate(`
       import AcrylicOrangeTheme from '@wso2/oxygen-ui/AcrylicOrangeTheme';
       import { AcrylicOrangeTheme as FromTheBarrel } from '@wso2/oxygen-ui';
       import Provider, { useThemeSwitcher, createEmotionCache } from '@wso2/oxygen-ui/OxygenUIThemeProvider';
+      import { OxygenUIThemeProvider, useThemeSwitcher as switcherFromTheBarrel, createEmotionCache as cacheFromTheBarrel } from '@wso2/oxygen-ui';
       import version from '@wso2/oxygen-ui/version';
       import { version as versionFromTheBarrel } from '@wso2/oxygen-ui';
-      export { AcrylicOrangeTheme, FromTheBarrel, Provider, useThemeSwitcher, createEmotionCache, version, versionFromTheBarrel };
+      export { AcrylicOrangeTheme, FromTheBarrel, Provider, OxygenUIThemeProvider, useThemeSwitcher, switcherFromTheBarrel, createEmotionCache, cacheFromTheBarrel, version, versionFromTheBarrel };
     `);
 
     expect(app.AcrylicOrangeTheme).toBe(app.FromTheBarrel);
-    expect(app.Provider).toBeDefined();
-    expect(typeof app.useThemeSwitcher).toBe('function');
-    expect(typeof app.createEmotionCache).toBe('function');
+    expect(app.Provider).toBe(app.OxygenUIThemeProvider);
+    expect(app.useThemeSwitcher).toBe(app.switcherFromTheBarrel);
+    expect(app.createEmotionCache).toBe(app.cacheFromTheBarrel);
     expect(app.version).toBe(app.versionFromTheBarrel);
   });
 
