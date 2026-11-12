@@ -50,6 +50,23 @@ const materialPaths = readdirSync(materialRoot, { withFileTypes: true })
   .map(entry => entry.name)
   .filter(name => name !== 'esm' && name !== 'version');
 
+const hooks = ['useAppShell', 'useNotifications', 'useThemeContent'];
+
+const themes = [
+  'OxygenTheme',
+  'AcrylicOrangeTheme',
+  'AcrylicPurpleTheme',
+  'ChoreoLabsTheme',
+  'ClassicTheme',
+  'HighContrastTheme',
+  'PaleBaseTheme',
+  'PaleGrayTheme',
+  'PaleIndigoTheme',
+  'WSO2Theme',
+];
+
+const pathsOfOneName = ['OxygenUIThemeProvider', 'Layout', 'ParticleBackground', 'version'];
+
 const publishedPaths = globSync('paths/*.js', { cwd: join(packageRoot, 'dist') }).map(file => file.replace(/^paths\/(.*)\.js$/, '$1'));
 
 describe('path imports', { timeout: 120_000 }, () => {
@@ -86,9 +103,16 @@ describe('path imports', { timeout: 120_000 }, () => {
     expect(app.PathTextField).not.toBe(app.MaterialTextField);
   });
 
-  it('has a path for every Oxygen component folder, one for SearchBarWithAdvancedFilter, and one for every Material UI path, and no other', () => {
+  it('has a path for every Oxygen component folder, Material UI path, shared hook and theme, and for the provider, Layout, ParticleBackground and version, and no other', () => {
     // An Oxygen component folder and a Material UI path of one name are one path, the Oxygen one.
-    const expected = new Set([...componentFolders, 'SearchBarWithAdvancedFilter', ...materialPaths]);
+    const expected = new Set([
+      ...componentFolders,
+      'SearchBarWithAdvancedFilter',
+      ...materialPaths,
+      ...hooks,
+      ...themes,
+      ...pathsOfOneName,
+    ]);
 
     expect([...publishedPaths].sort()).toEqual([...expected].sort());
   });
@@ -129,17 +153,47 @@ describe('path imports', { timeout: 120_000 }, () => {
     }
   });
 
-  it('has a map entry for every value Material UI exports', async () => {
+  it('has a map entry for every value the barrel exports', async () => {
     const app = await installed.evaluate(`
-      import * as material from '@mui/material';
-      export const names = Object.keys(material);
+      import * as barrel from '@wso2/oxygen-ui';
+      export const names = Object.keys(barrel);
     `);
-
-    const versionNames = ['version', 'major', 'minor', 'patch', 'prerelease'];
     // Material UI exports these at run time and leaves them out of its declarations, so no import of them type checks.
     const withoutDeclarations = ['FormLabelRoot', 'createTransitions', 'experimental_extendTheme', 'private_createMixins', 'usePagination'];
+    const withMuiXPaths = ['DataGrid', 'DatePickers', 'TreeView', 'AdapterDateFns'];
 
-    expect((app.names as string[]).filter(name => ![...versionNames, ...withoutDeclarations].includes(name) && !(name in nameToPathMap))).toEqual([]);
+    expect(
+      (app.names as string[]).filter(name => ![...withoutDeclarations, ...withMuiXPaths].includes(name) && !(name in nameToPathMap)),
+    ).toEqual([]);
+  });
+
+  it('puts the hooks, the themes, the provider and what goes with it, Layout, ParticleBackground and version on paths of their own', () => {
+    const pathOf = (name: string) => nameToPathMap[name]?.path;
+
+    for (const hook of hooks) expect(pathOf(hook), hook).toBe(`@wso2/oxygen-ui/${hook}`);
+    for (const theme of themes) expect(pathOf(theme), theme).toBe(`@wso2/oxygen-ui/${theme}`);
+    for (const name of pathsOfOneName) expect(pathOf(name), name).toBe(`@wso2/oxygen-ui/${name}`);
+    for (const name of ['useThemeSwitcher', 'createEmotionCache', 'ThemeOption', 'ThemeSwitcherContextValue', 'EmotionCache']) {
+      expect(pathOf(name), name).toBe('@wso2/oxygen-ui/OxygenUIThemeProvider');
+    }
+    expect(pathOf('major')).toBe('@wso2/oxygen-ui/version');
+  });
+
+  it('gives a theme path the theme as its default export, and no other theme with it', async () => {
+    const app = await installed.evaluate(`
+      import AcrylicOrangeTheme from '@wso2/oxygen-ui/AcrylicOrangeTheme';
+      import { AcrylicOrangeTheme as FromTheBarrel } from '@wso2/oxygen-ui';
+      import Provider, { useThemeSwitcher, createEmotionCache } from '@wso2/oxygen-ui/OxygenUIThemeProvider';
+      import version from '@wso2/oxygen-ui/version';
+      import { version as versionFromTheBarrel } from '@wso2/oxygen-ui';
+      export { AcrylicOrangeTheme, FromTheBarrel, Provider, useThemeSwitcher, createEmotionCache, version, versionFromTheBarrel };
+    `);
+
+    expect(app.AcrylicOrangeTheme).toBe(app.FromTheBarrel);
+    expect(app.Provider).toBeDefined();
+    expect(typeof app.useThemeSwitcher).toBe('function');
+    expect(typeof app.createEmotionCache).toBe('function');
+    expect(app.version).toBe(app.versionFromTheBarrel);
   });
 
   it('gives Material UI paths the default and the named exports of Material UI', async () => {

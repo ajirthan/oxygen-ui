@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import ts from 'typescript';
@@ -30,8 +30,16 @@ const materialPackage = '@mui/material';
 /** Components that live inside another component's folder but are public in their own right. */
 const componentsBesideTheirFolder = ['SearchBar/SearchBarWithAdvancedFilter'];
 
-/** `version` is the Oxygen version on the barrel, not Material UI's, and `esm` is Material UI's build output, not a path. */
-const materialFoldersWithoutAMaterialPath = ['version', 'esm'];
+/** `esm` is Material UI's build output, not a path. */
+const materialFoldersWithoutAMaterialPath = ['esm'];
+
+/** Names of the MUI X packages on the barrel. They have no path. */
+const muiXNamesOnTheBarrel = ['DataGrid', 'DatePickers', 'TreeView', 'AdapterDateFns'];
+
+/** What an Oxygen path carries besides what its module exports: a default export that the barrel names, and types. */
+const additionsToOxygenPaths = {
+  OxygenUIThemeProvider: [{ from: '@emotion/cache', defaultNamed: 'createEmotionCache', names: ['EmotionCache'] }],
+};
 
 /** What Oxygen adds to the Material UI path of the same name: where it is defined, and the names. */
 const oxygenAdditionsToMaterialPaths = {
@@ -49,9 +57,6 @@ const oxygenAdditionsToMaterialPaths = {
  */
 const materialRootNamesOnTheUtilsPath = ['unstable_composeClasses'];
 
-/** Barrel names that are a Material UI module as a namespace, not a name Material UI exports. */
-const materialNamespacesOnTheBarrel = ['colors'];
-
 const sourceFileOf = moduleId => {
   const file = ['.ts', '.tsx'].map(extension => path.join(sourceRoot, moduleId + extension)).find(existsSync);
 
@@ -60,26 +65,52 @@ const sourceFileOf = moduleId => {
   return file;
 };
 
+const foldersWithAnIndex = root =>
+  readdirSync(root, { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && existsSync(path.join(root, entry.name, 'index.ts')))
+    .map(entry => entry.name);
+
+const pathsOfFolders = folder =>
+  foldersWithAnIndex(path.join(sourceRoot, folder)).map(name => ({ name, moduleId: `${folder}/${name}/index` }));
+
+/** A theme has a path named after its barrel name, and the module that the theme index takes it from. */
+function describeThemePaths() {
+  const index = path.join(sourceRoot, 'styles/Themes/index.ts');
+  const source = ts.createSourceFile(index, readFileSync(index, 'utf8'), ts.ScriptTarget.Latest);
+
+  return source.statements.filter(ts.isExportDeclaration).flatMap(statement =>
+    statement.exportClause.elements
+      .filter(element => element.propertyName?.text === 'default')
+      .map(element => ({ name: element.name.text, moduleId: `styles/Themes/${statement.moduleSpecifier.text.replace('./', '')}` })),
+  );
+}
+
 /**
- * One path per Oxygen component folder, named after the folder, so a new component gets its path
- * when its folder appears. A path is the folder's index, so it carries everything the index exports.
+ * One path per Oxygen component, hook, context and animation folder, named after the folder, so a new one
+ * gets its path when its folder appears. A path is the folder's index, so it carries everything the index exports.
  */
-function describeComponentPaths() {
-  const folders = readdirSync(componentsRoot, { withFileTypes: true })
-    .filter(entry => entry.isDirectory() && existsSync(path.join(componentsRoot, entry.name, 'index.ts')))
-    .map(entry => ({ name: entry.name, moduleId: `components/${entry.name}/index` }));
+function describeOxygenPaths() {
   const beside = componentsBesideTheirFolder.map(moduleId => ({
     name: path.basename(moduleId),
     moduleId: `components/${moduleId}`,
   }));
 
-  return [...folders, ...beside].map(component => ({ ...component, source: sourceFileOf(component.moduleId) }));
+  return [
+    ...pathsOfFolders('components'),
+    ...beside,
+    ...pathsOfFolders('hooks'),
+    ...pathsOfFolders('contexts'),
+    ...pathsOfFolders('animations'),
+    ...describeThemePaths(),
+    { name: 'Layout', moduleId: 'layouts/index' },
+    { name: 'version', moduleId: 'version' },
+  ].map(oxygenPath => ({ ...oxygenPath, source: sourceFileOf(oxygenPath.moduleId) }));
 }
 
 /** One path per Material UI path that has an index, discovered from the installed Material UI. */
-function describeMaterialPaths(componentPaths) {
+function describeMaterialPaths(oxygenPaths) {
   const materialRoot = path.dirname(createRequire(import.meta.url).resolve(`${materialPackage}/package.json`));
-  const oxygenNames = new Set(componentPaths.map(component => component.name));
+  const oxygenNames = new Set(oxygenPaths.map(oxygenPath => oxygenPath.name));
 
   return readdirSync(materialRoot, { withFileTypes: true })
     .filter(entry => entry.isDirectory() && existsSync(path.join(materialRoot, entry.name, 'index.d.ts')))
@@ -135,12 +166,13 @@ const isTypeOnly = target => !(target.flags & ts.SymbolFlags.Value);
  */
 const renderEntry = (clauses, { declaration }) =>
   clauses
-    .flatMap(({ from, star, defaultAs, names = [] }) => {
+    .flatMap(({ from, star, defaultAs, defaultNamed, names = [] }) => {
       const lines = [];
 
       if (star) lines.push(`export * from '${from}';`);
       if (defaultAs === 'default') lines.push(`export { default } from '${from}';`);
       else if (defaultAs) lines.push(`export { ${defaultAs} as default } from '${from}';`);
+      if (defaultNamed) lines.push(`export { default as ${defaultNamed} } from '${from}';`);
 
       const values = names.filter(name => !name.typeOnly).map(name => name.name);
       const types = names.filter(name => name.typeOnly).map(name => name.name);
@@ -208,43 +240,52 @@ function describeNameToPathMap(published, barrelNames, { resolve, moduleSymbol, 
 
 export function describePathEntries() {
   const barrelModule = path.join(sourceRoot, 'index.ts');
-  const componentsBarrel = path.join(componentsRoot, 'index.ts');
-  const components = describeComponentPaths();
-  const materials = describeMaterialPaths(components);
+  const oxygen = describeOxygenPaths();
+  const materials = describeMaterialPaths(oxygen);
   const additionModules = Object.values(oxygenAdditionsToMaterialPaths).flat().map(({ moduleId }) => sourceFileOf(moduleId));
   const program = openProgram(
     [
       barrelModule,
-      ...components.map(component => component.source),
+      ...oxygen.map(oxygenPath => oxygenPath.source),
       ...materials.map(material => material.specifier),
       materialPackage,
-      `${materialPackage}/version`,
+      ...Object.values(additionsToOxygenPaths).flat().map(({ from }) => from),
       ...additionModules,
     ],
     barrelModule,
   );
   const { exportsOf, resolve } = program;
   const exportsByName = file => new Map(exportsOf(file).map(symbol => [symbol.name, resolve(symbol)]));
-  const componentBarrelNames = new Set(exportsOf(componentsBarrel).map(symbol => symbol.name));
+  const oxygenExports = new Map(oxygen.map(oxygenPath => [oxygenPath.name, exportsByName(oxygenPath.source)]));
+  const namesOxygenDefines = new Set([...oxygenExports.values()].flatMap(exports => [...exports.keys()]));
   const materialByName = new Map(materials.map(material => [material.name, material]));
 
-  const oxygenPaths = components.map(component => {
-    const exports = exportsByName(component.source);
-    const clauses = [{ from: `../${component.moduleId}.js`, star: true, defaultAs: defaultExportOf(component, exports) }];
-    const material = materialByName.get(component.name);
+  const oxygenPaths = oxygen.map(oxygenPath => {
+    const exports = oxygenExports.get(oxygenPath.name);
+    const clauses = [{ from: `../${oxygenPath.moduleId}.js`, star: true, defaultAs: defaultExportOf(oxygenPath, exports) }];
+
+    for (const { from, defaultNamed, names } of additionsToOxygenPaths[oxygenPath.name] ?? []) {
+      const added = exportsByName(from);
+
+      clauses.push({ from, defaultNamed, names: names.map(name => ({ name, typeOnly: isTypeOnly(added.get(name)) })) });
+      exports.set(defaultNamed, added.get('default'));
+      for (const name of names) exports.set(name, added.get(name));
+    }
+
+    const material = materialByName.get(oxygenPath.name);
 
     if (material) {
-      // The Override replaces these Material UI names on the barrel, so they stay with the Override.
+      // Oxygen replaces these Material UI names on the barrel, so the Material UI names it leaves stay with the Oxygen path.
       const materialExports = exportsByName(material.specifier);
       const extras = [...materialExports]
-        .filter(([name]) => name !== 'default' && !exports.has(name) && !componentBarrelNames.has(name))
+        .filter(([name]) => name !== 'default' && !namesOxygenDefines.has(name))
         .map(([name, target]) => ({ name, typeOnly: isTypeOnly(target) }));
 
       clauses.push({ from: material.specifier, names: extras });
       for (const extra of extras) exports.set(extra.name, materialExports.get(extra.name));
     }
 
-    return { name: component.name, clauses, exports };
+    return { name: oxygenPath.name, clauses, exports };
   });
 
   const materialPaths = materials
@@ -276,19 +317,9 @@ export function describePathEntries() {
     });
 
   const published = [...oxygenPaths, ...materialPaths];
-  const barrelExports = exportsOf(barrelModule);
-  const mapped = new Set([
-    ...componentBarrelNames,
-    ...exportsOf(materialPackage).map(symbol => symbol.name),
-    ...materialNamespacesOnTheBarrel,
-  ]);
-
-  for (const name of [...materialFoldersWithoutAMaterialPath, ...exportsOf(`${materialPackage}/version`).map(symbol => symbol.name)]) {
-    mapped.delete(name);
-  }
 
   return {
-    sources: components.map(component => component.source),
+    sources: oxygen.map(oxygenPath => oxygenPath.source),
     paths: published.map(entry => ({
       name: entry.name,
       javascript: renderEntry(entry.clauses, { declaration: false }),
@@ -296,7 +327,7 @@ export function describePathEntries() {
     })),
     nameToPathMap: describeNameToPathMap(
       published,
-      barrelExports.filter(symbol => mapped.has(symbol.name)),
+      exportsOf(barrelModule).filter(symbol => !muiXNamesOnTheBarrel.includes(symbol.name)),
       program,
     ),
   };
