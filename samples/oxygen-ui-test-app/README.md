@@ -122,7 +122,6 @@ function App() {
 - [@wso2/oxygen-ui](../../packages/oxygen-ui/README.md) - WSO2 Oxygen UI component library
 - [@wso2/oxygen-ui-icons-react](../../packages/oxygen-ui-icons-react/README.md) - Icon library
 - [@wso2/eslint-plugin-oxygen-ui](../../packages/eslint-plugin-oxygen-ui/README.md) - ESLint plugin
-- [@wso2/vite-plugin-oxygen-ui](../../packages/vite-plugin-oxygen-ui/README.md) - Vite plugin
 
 ## ESLint Configuration
 
