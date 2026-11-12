@@ -63,6 +63,7 @@ const namesRemovedUpstream = ['ChoreoLabsTheme'];
 const pathImportRows = [
   { name: 'TextField', path: 'TextField' },
   { name: 'Header', path: 'Header' },
+  { name: 'Button', path: 'Button' },
 ];
 
 const pathImportGzipAllowanceOverBarrel = 2048;

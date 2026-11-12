@@ -20,7 +20,7 @@ import { existsSync, globSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const commentLine = /^\s*(\*|\/\/|\/\*)/;
-const relativeSpecifier = /(\bfrom\s*|\bimport\s*\(\s*)(["'])(\.{1,2}\/[^"']*)\2/g;
+const relativeSpecifier = /(\bfrom\s*|\bimport\s*\(\s*)(["'])(\.{1,2}(?:\/[^"']*)?)\2/g;
 
 const withExtension = (declaration, specifier) => {
   if (/\.(js|json)$/.test(specifier)) return specifier;
