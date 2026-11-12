@@ -60,6 +60,13 @@ const rows: Row[] = [
 
 const namesRemovedUpstream = ['ChoreoLabsTheme'];
 
+const pathImportRows = [
+  { name: 'TextField', path: 'TextField' },
+  { name: 'Header', path: 'Header' },
+];
+
+const pathImportGzipAllowanceOverBarrel = 2048;
+
 describe('built package', { timeout: 60_000 }, () => {
   let installed: InstalledPackage;
   const measured: { app: string; bundler: Bundler; gzipBytes: number; holds: string }[] = [];
@@ -81,6 +88,22 @@ describe('built package', { timeout: 60_000 }, () => {
   it('does not resolve a path to an internal module', async () => {
     await expect(installed.bundle(`import '@wso2/oxygen-ui/components/TextField/TextField';\n`, 'rolldown')).rejects.toThrow();
     await expect(installed.bundle(`import '@wso2/oxygen-ui/index';\n`, 'vite')).rejects.toThrow();
+    await expect(installed.bundle(`import '@wso2/oxygen-ui/paths/TextField';\n`, 'rolldown')).rejects.toThrow();
+  });
+
+  describe.each(pathImportRows)('app importing $name by path', row => {
+    it.each(bundlers)('bundled with %s holds no marked code and stays within 2 KB of the barrel import', async bundler => {
+      const byPath = await installed.bundle(
+        `import ${row.name} from '@wso2/oxygen-ui/${row.path}';\nexport { ${row.name} };\n`,
+        bundler,
+      );
+      const byBarrel = await installed.bundle(barrelImport(row.name), bundler);
+
+      measured.push({ app: `${row.name} by path`, bundler, gzipBytes: byPath.gzipBytes, holds: byPath.markers.join(', ') });
+
+      expect.soft(byPath.markers).toEqual([]);
+      expect.soft(byPath.gzipBytes).toBeLessThanOrEqual(byBarrel.gzipBytes + pathImportGzipAllowanceOverBarrel);
+    });
   });
 
   describe.each(rows)('app importing $name', row => {

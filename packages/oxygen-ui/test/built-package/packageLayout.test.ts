@@ -28,7 +28,7 @@ const distribution = join(packageRoot, 'dist');
 const manifest = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8'));
 
 const builtModules = (): string[] =>
-  globSync('**/*.js', { cwd: distribution }).filter(file => !file.startsWith('_virtual/'));
+  globSync('**/*.js', { cwd: distribution }).filter(file => !file.startsWith('_virtual/') && !file.startsWith('paths/'));
 
 describe('built package layout', () => {
   it('has one module per source module, in the source directory layout', () => {
@@ -55,8 +55,18 @@ describe('built package layout', () => {
     expect(withoutExtension).toEqual([]);
   });
 
-  it('exports only the root, with types and an ESM import condition', () => {
-    expect(manifest.exports).toEqual({ '.': { types: './dist/index.d.ts', import: './dist/index.js' } });
+  it('exports the root, the name-to-path map, and the folder of path entries, with types and an ESM import condition', () => {
+    expect(manifest.exports).toEqual({
+      '.': { types: './dist/index.d.ts', import: './dist/index.js' },
+      './path-map.json': './dist/path-map.json',
+      './*': { types: './dist/paths/*.d.ts', import: './dist/paths/*.js' },
+    });
+  });
+
+  it('publishes in the folder of path entries only the entries', () => {
+    const entries = globSync('paths/**', { cwd: distribution }).filter(file => /\.[a-z.]+$/.test(file));
+
+    expect(entries.every(file => /^paths\/[A-Za-z]+\.(js|d\.ts)$/.test(file))).toBe(true);
   });
 
   it('lists as side effects only modules that exist', () => {

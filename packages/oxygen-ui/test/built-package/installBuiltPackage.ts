@@ -30,9 +30,10 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { gzipSync } from 'node:zlib';
 import { rolldown, type Plugin } from 'rolldown';
+import ts from 'typescript';
 import { build as viteBuild } from 'vite';
 
 const packageRoot = fileURLToPath(new URL('../..', import.meta.url));
@@ -58,6 +59,10 @@ interface BundleReport {
 export interface InstalledPackage {
   bundle(appSource: string, bundler: Bundler): Promise<BundleReport>;
   barrelExportNames(): Promise<string[]>;
+  /** Bundles the app with Vite and runs it, so a test can compare the objects its imports give. */
+  evaluate(appSource: string): Promise<Record<string, unknown>>;
+  /** Type checks a module of the app, and returns what TypeScript reports for it and for the package's own declarations. */
+  typeCheck(appSource: string, moduleResolution: 'bundler' | 'node16' | 'nodenext'): string[];
   remove(): void;
 }
 
@@ -88,7 +93,11 @@ const bundleWithRolldown: Bundle = async (appRoot, entry) => {
     cwd: appRoot,
     platform: 'browser',
     external: reactIsExternal,
-    logLevel: 'silent',
+    logLevel: 'warn',
+    // Rolldown makes an import it cannot resolve external and warns; an app's build is not meant to pass on that.
+    onLog: (_level, log) => {
+      if (log.code === 'UNRESOLVED_IMPORT') throw new Error(log.message);
+    },
     plugins: [stylesheetsAsEmptyModules],
   });
 
@@ -153,7 +162,10 @@ function packInto(directory: string): string {
 function linkDependencies(installedPackage: string, nodeModules: string): void {
   const manifest = JSON.parse(readFileSync(join(installedPackage, 'package.json'), 'utf8'));
 
-  for (const dependency of Object.keys({ ...manifest.dependencies, ...manifest.peerDependencies })) {
+  // An app that type checks has React's types, which the declarations of the package import.
+  const typePackages = ['@types/react', '@types/react-dom'];
+
+  for (const dependency of [...Object.keys({ ...manifest.dependencies, ...manifest.peerDependencies }), ...typePackages]) {
     const link = join(nodeModules, dependency);
 
     mkdirSync(dirname(link), { recursive: true });
@@ -196,6 +208,46 @@ export function installBuiltPackage(): InstalledPackage {
       const markers = (Object.keys(markerCode) as Marker[]).filter(marker => code.includes(markerCode[marker]));
 
       return { gzipBytes: gzipSync(code).length, markers };
+    },
+    async evaluate(appSource) {
+      // Rolldown evaluates a CommonJS module such as Prism's languages after the code that imports it for effect.
+      const chunks = await bundleApp(appSource, 'vite');
+      const entry = chunks.find(chunk => chunk.isEntry);
+
+      if (!entry) throw new Error('The app bundled to no entry chunk.');
+
+      appCount += 1;
+      const bundled = join(appRoot, `bundled-${appCount}.mjs`);
+
+      writeFileSync(bundled, entry.code);
+
+      return import(/* @vite-ignore */ pathToFileURL(bundled).href);
+    },
+    typeCheck(appSource, moduleResolution) {
+      const consumer = join(appRoot, 'consumer.mts');
+      const resolution = {
+        bundler: { module: ts.ModuleKind.ESNext, moduleResolution: ts.ModuleResolutionKind.Bundler },
+        node16: { module: ts.ModuleKind.Node16, moduleResolution: ts.ModuleResolutionKind.Node16 },
+        nodenext: { module: ts.ModuleKind.NodeNext, moduleResolution: ts.ModuleResolutionKind.NodeNext },
+      }[moduleResolution];
+
+      writeFileSync(consumer, appSource);
+
+      const program = ts.createProgram([consumer], {
+        ...resolution,
+        target: ts.ScriptTarget.ES2022,
+        jsx: ts.JsxEmit.ReactJSX,
+        strict: true,
+        noEmit: true,
+        skipLibCheck: false,
+        types: [],
+      });
+
+      return program
+        .getSourceFiles()
+        .filter(file => file.fileName === consumer || file.fileName.includes('/@wso2/oxygen-ui/dist/'))
+        .flatMap(file => program.getSemanticDiagnostics(file))
+        .map(diagnostic => `${diagnostic.file?.fileName.replace(appRoot, '')}: ${ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`);
     },
     async barrelExportNames() {
       const chunks = await bundleApp(`export * from '@wso2/oxygen-ui';\n`, 'rolldown');
