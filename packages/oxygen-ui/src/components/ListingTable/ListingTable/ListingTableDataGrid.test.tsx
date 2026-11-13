@@ -51,6 +51,33 @@ describe('ListingTableDataGrid', () => {
     expect(screen.queryByLabelText('Loading data grid')).toBeNull();
   });
 
+  it('leaves the loading state for an instance mounted while the load finishes before its effect runs', async () => {
+    let finishLoading: () => void = () => undefined;
+    loadListingTableDataGrid.mockReturnValue({
+      then: (onLoaded: (module: typeof loadedModule) => void) => {
+        finishLoading = () => onLoaded(loadedModule);
+      },
+    });
+    const { default: ListingTableDataGrid } = await import('./ListingTableDataGrid');
+
+    function FinishLoadingBeforeEffects() {
+      React.useLayoutEffect(() => finishLoading(), []);
+      return null;
+    }
+
+    const { rerender } = render(<ListingTableDataGrid rows={[]} columns={[]} />);
+    rerender(
+      <>
+        <ListingTableDataGrid rows={[]} columns={[]} />
+        <FinishLoadingBeforeEffects />
+        <ListingTableDataGrid rows={[]} columns={[]} />
+      </>,
+    );
+
+    await waitFor(() => expect(screen.getAllByText('grid loaded')).toHaveLength(2));
+    expect(screen.queryByLabelText('Loading data grid')).toBeNull();
+  });
+
   it('shows an error state when the load fails', async () => {
     loadListingTableDataGrid.mockRejectedValue(new Error('chunk failed'));
 
