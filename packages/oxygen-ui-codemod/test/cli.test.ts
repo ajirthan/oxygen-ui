@@ -127,6 +127,21 @@ describe('path-imports --check', () => {
     expect(code).toBe(0);
   });
 
+  it('counts every reported case, dynamic imports, requires and unknown names included', async () => {
+    writeApp({
+      'src/a.tsx': [
+        `import * as O from '@wso2/oxygen-ui';`,
+        `const lazy = import('@wso2/oxygen-ui');`,
+        `const cjs = require('@wso2/oxygen-ui');`,
+        `import { Missing } from '@wso2/oxygen-ui';`,
+        ``,
+      ].join('\n'),
+    });
+    const { code, out } = await run('path-imports', '--check');
+    expect(code).toBe(1);
+    for (const line of [1, 2, 3, 4]) expect(out).toContain(`${path.join('src', 'a.tsx')}:${line}`);
+  });
+
   it('lists a barrel import the transform cannot rewrite', async () => {
     writeApp({ 'src/a.tsx': `import * as O from '@wso2/oxygen-ui';\n` });
     const { code, out } = await run('path-imports', '--check');

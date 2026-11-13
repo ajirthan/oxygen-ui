@@ -17,18 +17,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { transformPathImports, type PathMap } from '../src/transform.js';
-
-const map: PathMap = {
-  TextField: { path: '@wso2/oxygen-ui/TextField', kind: 'default', typeOnly: false },
-  TextFieldProps: { path: '@wso2/oxygen-ui/TextField', kind: 'named', typeOnly: true },
-  textFieldClasses: { path: '@wso2/oxygen-ui/TextField', kind: 'named', typeOnly: false },
-  Button: { path: '@wso2/oxygen-ui/Button', kind: 'default', typeOnly: false },
-  useAppShell: { path: '@wso2/oxygen-ui/useAppShell', kind: 'default', typeOnly: false },
-  ColorSchemeToggle: { path: '@wso2/oxygen-ui/ColorSchemeToggle', kind: 'default', typeOnly: false },
-  ColorSchemeToggleDefault: { path: '@wso2/oxygen-ui/ColorSchemeToggle', kind: 'default', typeOnly: false },
-  DataGrid: { path: '@wso2/oxygen-ui/data-grid', kind: 'namespace', typeOnly: false },
-};
+import { transformPathImports } from '../src/transform.js';
+import { map } from './map.js';
 
 const run = (source: string) => transformPathImports(source, map);
 
@@ -103,25 +93,16 @@ describe('transformPathImports', () => {
     expect(reports).toEqual([expect.objectContaining({ line: 2, reason: 'unknown-name' })]);
   });
 
-  it('reports barrel imports it does not rewrite yet, with their line, and leaves them', () => {
+  it('reports the lines of the cases it leaves, counted in the new source', () => {
     const input = [
       `import { Button } from '@wso2/oxygen-ui';`,
       `import * as Oxygen from '@wso2/oxygen-ui';`,
-      `import type { TextFieldProps } from '@wso2/oxygen-ui';`,
-      `import { DataGrid } from '@wso2/oxygen-ui';`,
-      `export { Button as B } from '@wso2/oxygen-ui';`,
       `const lazy = import('@wso2/oxygen-ui');`,
       `const cjs = require('@wso2/oxygen-ui');`,
       ``,
     ].join('\n');
-    const { source, reports } = run(input);
-    expect(source).toBe(
-      input.replace(
-        `import { Button } from '@wso2/oxygen-ui';`,
-        `import Button from '@wso2/oxygen-ui/Button';`,
-      ),
-    );
-    expect(reports.map((r) => r.line)).toEqual([2, 3, 4, 5, 6, 7]);
+    const { reports } = run(input);
+    expect(reports.map((r) => r.line)).toEqual([2, 3, 4]);
   });
 
   it('reports the line a remaining import has in the new source', () => {
