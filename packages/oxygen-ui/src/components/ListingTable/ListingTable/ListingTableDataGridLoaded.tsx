@@ -90,7 +90,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   },
 })) as typeof DataGrid;
 
-export function ListingTableDataGridLoaded({
+function ListingTableDataGridLoaded({
   density: densityProp,
   loading: loadingProp,
   getRowSpacing: getRowSpacingProp,
