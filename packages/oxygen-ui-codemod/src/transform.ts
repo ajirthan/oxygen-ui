@@ -98,8 +98,8 @@ const rewriteImport = (
       };
     }
     const group = byPath.get(entry.path) ?? { named: [] };
-    if (entry.kind === 'default') group.main = name;
-    else group.named.push(name);
+    if (entry.kind === 'default' && group.main === undefined) group.main = name;
+    else group.named.push(entry.kind === 'default' ? `default as ${name}` : name);
     byPath.set(entry.path, group);
   }
 

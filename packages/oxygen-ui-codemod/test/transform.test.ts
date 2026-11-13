@@ -25,6 +25,8 @@ const map: PathMap = {
   textFieldClasses: { path: '@wso2/oxygen-ui/TextField', kind: 'named', typeOnly: false },
   Button: { path: '@wso2/oxygen-ui/Button', kind: 'default', typeOnly: false },
   useAppShell: { path: '@wso2/oxygen-ui/useAppShell', kind: 'default', typeOnly: false },
+  ColorSchemeToggle: { path: '@wso2/oxygen-ui/ColorSchemeToggle', kind: 'default', typeOnly: false },
+  ColorSchemeToggleDefault: { path: '@wso2/oxygen-ui/ColorSchemeToggle', kind: 'default', typeOnly: false },
   DataGrid: { path: '@wso2/oxygen-ui/data-grid', kind: 'namespace', typeOnly: false },
 };
 
@@ -47,6 +49,15 @@ describe('transformPathImports', () => {
     );
     expect(source).toBe(
       `import TextField, { textFieldClasses } from '@wso2/oxygen-ui/TextField';\nimport Button from '@wso2/oxygen-ui/Button';\n`,
+    );
+  });
+
+  it('binds a second name for the same default export with default as', () => {
+    const { source } = run(
+      `import { ColorSchemeToggleDefault, ColorSchemeToggle } from '@wso2/oxygen-ui';`,
+    );
+    expect(source).toBe(
+      `import ColorSchemeToggleDefault, { default as ColorSchemeToggle } from '@wso2/oxygen-ui/ColorSchemeToggle';`,
     );
   });
 
