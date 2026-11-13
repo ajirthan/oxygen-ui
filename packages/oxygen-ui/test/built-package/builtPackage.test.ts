@@ -125,6 +125,12 @@ describe('built package', { timeout: 60_000 }, () => {
     });
   });
 
+  it.each(bundlers)('bundled with %s leaves a dynamically imported module out of the initial chunks', async bundler => {
+    const report = await installed.bundle(`export const loadDataGrid = () => import('@wso2/oxygen-ui/data-grid');\n`, bundler);
+
+    expect(report.markers).toEqual([]);
+  });
+
   describe.each(rows)('app importing $name', row => {
     it.each(bundlers)('bundled with %s holds only the marked code it uses, within its gzip budget', async bundler => {
       const report = await installed.bundle(row.app, bundler);
