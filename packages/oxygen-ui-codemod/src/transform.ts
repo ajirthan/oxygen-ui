@@ -61,58 +61,146 @@ interface Remaining {
 const isBarrelLiteral = (node: ts.Node | undefined): boolean =>
   node !== undefined && ts.isStringLiteralLike(node) && node.text === BARREL;
 
-const rewriteImport = (
-  statement: ts.ImportDeclaration,
-  source: string,
-  map: PathMap,
-): { text: string } | { remaining: Omit<Remaining, 'position'> } => {
-  const clause = statement.importClause;
-  const bindings = clause?.namedBindings;
-  if (!clause || clause.isTypeOnly || clause.name || !bindings || !ts.isNamedImports(bindings)) {
-    return {
-      remaining: {
-        reason: 'unsupported-import',
-        message: 'This barrel import is not a plain named import of values.',
-      },
-    };
-  }
+interface Binding {
+  imported: string;
+  local: string;
+  typeOnly: boolean;
+}
 
-  const byPath = new Map<string, { main?: string; named: string[] }>();
-  for (const specifier of bindings.elements) {
-    const name = specifier.name.text;
-    const entry = map[name];
-    if (specifier.isTypeOnly || specifier.propertyName || entry?.kind === 'namespace') {
-      return {
-        remaining: {
-          reason: 'unsupported-import',
-          message: `The import of ${name} is a type-only import, a rename or a namespace.`,
-        },
-      };
-    }
+interface Placement {
+  binding: Binding;
+  entry: PathMapEntry;
+}
+
+type Refusal = Omit<Remaining, 'position'>;
+
+const placeBindings = (bindings: Binding[], map: PathMap): Map<string, Placement[]> | Refusal => {
+  const byPath = new Map<string, Placement[]>();
+  for (const binding of bindings) {
+    const entry = map[binding.imported];
     if (!entry) {
       return {
-        remaining: {
-          reason: 'unknown-name',
-          message: `${name} is not in the path map of the installed @wso2/oxygen-ui.`,
-        },
+        reason: 'unknown-name',
+        message: `${binding.imported} is not in the path map of the installed @wso2/oxygen-ui.`,
       };
     }
-    const group = byPath.get(entry.path) ?? { named: [] };
-    if (entry.kind === 'default' && group.main === undefined) group.main = name;
-    else group.named.push(entry.kind === 'default' ? `default as ${name}` : name);
-    byPath.set(entry.path, group);
+    const placed = { ...binding, typeOnly: binding.typeOnly || entry.typeOnly };
+    byPath.set(entry.path, [...(byPath.get(entry.path) ?? []), { binding: placed, entry }]);
+  }
+  return byPath;
+};
+
+const typeMarker = (typeOnly: boolean): string => (typeOnly ? 'type ' : '');
+
+const namedSpecifier = ({ binding, entry }: Placement, typeOnly: boolean): string => {
+  const exported = entry.kind === 'default' ? 'default' : binding.imported;
+  const renamed = exported === binding.local ? exported : `${exported} as ${binding.local}`;
+  return typeMarker(typeOnly) + renamed;
+};
+
+const importStatements = (path: string, placements: Placement[], statementTypeOnly: boolean, quote: string): string[] => {
+  const statements: string[] = [];
+  const bound = placements.filter(({ entry }) => entry.kind !== 'namespace');
+
+  for (const { binding, entry } of placements) {
+    if (entry.kind === 'namespace') {
+      statements.push(
+        `import ${typeMarker(statementTypeOnly || binding.typeOnly)}* as ${binding.local} from ${quote}${path}${quote}`,
+      );
+    }
+  }
+  if (bound.length === 0) return statements;
+
+  if (statementTypeOnly) {
+    const [only] = bound;
+    statements.push(
+      bound.length === 1 && only.entry.kind === 'default'
+        ? `import type ${only.binding.local} from ${quote}${path}${quote}`
+        : `import type { ${bound.map((p) => namedSpecifier(p, false)).join(', ')} } from ${quote}${path}${quote}`,
+    );
+    return statements;
   }
 
-  const quote = source[statement.moduleSpecifier.getStart()];
+  const main = bound.find(({ entry, binding }) => entry.kind === 'default' && !binding.typeOnly);
+  const named = bound.filter((placement) => placement !== main).map((p) => namedSpecifier(p, p.binding.typeOnly));
+  const parts = [main?.binding.local, named.length > 0 ? `{ ${named.join(', ')} }` : undefined];
+  statements.push(`import ${parts.filter(Boolean).join(', ')} from ${quote}${path}${quote}`);
+  return statements;
+};
+
+const exportStatements = (path: string, placements: Placement[], statementTypeOnly: boolean, quote: string): string[] => {
+  const statements: string[] = [];
+  const bound = placements.filter(({ entry }) => entry.kind !== 'namespace');
+
+  for (const { binding, entry } of placements) {
+    if (entry.kind === 'namespace') {
+      statements.push(
+        `export ${typeMarker(statementTypeOnly || binding.typeOnly)}* as ${binding.local} from ${quote}${path}${quote}`,
+      );
+    }
+  }
+  if (bound.length > 0) {
+    const specifiers = bound.map((p) => namedSpecifier(p, !statementTypeOnly && p.binding.typeOnly));
+    statements.push(`export ${typeMarker(statementTypeOnly)}{ ${specifiers.join(', ')} } from ${quote}${path}${quote}`);
+  }
+  return statements;
+};
+
+const rewriteStatement = (
+  statement: ts.ImportDeclaration | ts.ExportDeclaration,
+  source: string,
+  map: PathMap,
+): { text: string } | { remaining: Refusal } => {
+  const isImport = ts.isImportDeclaration(statement);
+  const bindings = isImport ? statement.importClause?.namedBindings : statement.exportClause;
+  const hasDefaultImport = isImport && statement.importClause?.name !== undefined;
+  const refusal = (reason: RemainingReason, message: string) => ({ remaining: { reason, message } });
+
+  if (!bindings || hasDefaultImport || !(ts.isNamedImports(bindings) || ts.isNamedExports(bindings))) {
+    return refusal(
+      isImport ? 'unsupported-import' : 'unsupported-export',
+      isImport
+        ? 'A whole-barrel namespace import, a default import or a bare import is not rewritten.'
+        : 'A barrel re-export of everything or as a namespace is not rewritten.',
+    );
+  }
+  if (bindings.elements.length === 0) {
+    return refusal(isImport ? 'unsupported-import' : 'unsupported-export', 'This statement names nothing.');
+  }
+
+  const statementText = statement.getText();
+  if (statement.attributes || /\/\/|\/\*/.test(statementText)) {
+    return refusal(
+      isImport ? 'unsupported-import' : 'unsupported-export',
+      'This statement has comments or import attributes that a rewrite would drop.',
+    );
+  }
+
+  const statementTypeOnly = ts.isImportDeclaration(statement)
+    ? Boolean(statement.importClause?.isTypeOnly)
+    : statement.isTypeOnly;
+  const placed = placeBindings(
+    bindings.elements.map((specifier) => ({
+      imported: (specifier.propertyName ?? specifier.name).text,
+      local: specifier.name.text,
+      typeOnly: specifier.isTypeOnly,
+    })),
+    map,
+  );
+  if (!(placed instanceof Map)) return { remaining: placed };
+
+  const quote = source[statement.moduleSpecifier!.getStart()];
   const semicolon = source[statement.getEnd() - 1] === ';' ? ';' : '';
   const lineStart = source.lastIndexOf('\n', statement.getStart() - 1) + 1;
-  const indent = source.slice(lineStart, statement.getStart());
+  const indent = /^[ \t]*/.exec(source.slice(lineStart, statement.getStart()))![0];
+  const build = isImport ? importStatements : exportStatements;
 
-  const lines = [...byPath].map(([path, { main, named }]) => {
-    const parts = [main, named.length > 0 ? `{ ${named.join(', ')} }` : undefined];
-    return `import ${parts.filter(Boolean).join(', ')} from ${quote}${path}${quote}${semicolon}`;
-  });
-  return { text: lines.join(`\n${indent}`) };
+  const lines = [...placed].flatMap(([path, placements]) => build(path, placements, statementTypeOnly, quote));
+  return {
+    text: lines
+      .map((line) => line + semicolon)
+      .join(`\n${indent}`),
+  };
 };
 
 const collectBarrelUses = (file: ts.SourceFile, source: string, map: PathMap) => {
@@ -120,21 +208,16 @@ const collectBarrelUses = (file: ts.SourceFile, source: string, map: PathMap) =>
   const remaining: Remaining[] = [];
 
   const visit = (node: ts.Node): void => {
-    if (ts.isImportDeclaration(node) && isBarrelLiteral(node.moduleSpecifier)) {
-      const result = rewriteImport(node, source, map);
+    if (
+      (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
+      isBarrelLiteral(node.moduleSpecifier)
+    ) {
+      const result = rewriteStatement(node, source, map);
       if ('text' in result) {
         edits.push({ start: node.getStart(), end: node.getEnd(), text: result.text });
       } else {
         remaining.push({ position: node.getStart(), ...result.remaining });
       }
-      return;
-    }
-    if (ts.isExportDeclaration(node) && isBarrelLiteral(node.moduleSpecifier)) {
-      remaining.push({
-        position: node.getStart(),
-        reason: 'unsupported-export',
-        message: 'This barrel re-export is not rewritten.',
-      });
       return;
     }
     if (ts.isCallExpression(node) && isBarrelLiteral(node.arguments[0])) {
