@@ -74,7 +74,10 @@ export function ListingTableDataGrid(props: ListingTableDataGridProps): ReactEle
   const [state, setState] = useState<LoadState>(initialLoadState);
 
   useEffect(() => {
-    if (loadedComponent) return undefined;
+    if (loadedComponent) {
+      setState({ status: 'loaded', Component: loadedComponent });
+      return undefined;
+    }
 
     let mounted = true;
     loadListingTableDataGrid().then(
