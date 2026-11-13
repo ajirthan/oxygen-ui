@@ -168,6 +168,9 @@ importers:
       '@types/estree':
         specifier: 1.0.6
         version: 1.0.6
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.6.0
       esbuild:
         specifier: 'catalog:'
         version: 0.25.11
@@ -177,6 +180,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.0.6(@types/node@24.6.0)(@vitest/ui@4.0.6)(jsdom@29.1.1)(terser@5.44.0)(yaml@2.8.1)
 
   packages/oxygen-ui:
     dependencies:
