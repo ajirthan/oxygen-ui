@@ -56,7 +56,6 @@ const themes = [
   'OxygenTheme',
   'AcrylicOrangeTheme',
   'AcrylicPurpleTheme',
-  'ChoreoLabsTheme',
   'ClassicTheme',
   'HighContrastTheme',
   'PaleBaseTheme',
