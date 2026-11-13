@@ -18,7 +18,8 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Footer, Box } from '@wso2/oxygen-ui';
+import Footer from '@wso2/oxygen-ui/Footer';
+import Box from '@wso2/oxygen-ui/Box';
 
 /**
  * Footer is a compound component for displaying application footer with copyright,

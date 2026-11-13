@@ -17,7 +17,10 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Popover, Button, Typography, Box } from '@wso2/oxygen-ui';
+import Popover from '@wso2/oxygen-ui/Popover';
+import Button from '@wso2/oxygen-ui/Button';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Box from '@wso2/oxygen-ui/Box';
 import React, { useState } from 'react';
 
 /**

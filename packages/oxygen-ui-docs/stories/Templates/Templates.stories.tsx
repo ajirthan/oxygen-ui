@@ -17,7 +17,12 @@
  */
 
 import { Meta, StoryObj } from '@storybook/react';
-import { Box, Typography, Card, CardContent, Grid, Link } from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Card from '@wso2/oxygen-ui/Card';
+import CardContent from '@wso2/oxygen-ui/CardContent';
+import Grid from '@wso2/oxygen-ui/Grid';
+import Link from '@wso2/oxygen-ui/Link';
 import React, { useState } from 'react';
 import { Default as DashboardTemplate } from './DashboardTemplate.stories';
 import { Default as EmptyStateTemplate } from './EmptyStateTemplate.stories';

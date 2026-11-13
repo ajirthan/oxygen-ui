@@ -18,7 +18,9 @@
 
 import { Controls, Description, Primary, Subtitle, Title } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ParticleBackground, Box, Typography } from '@wso2/oxygen-ui';
+import ParticleBackground from '@wso2/oxygen-ui/ParticleBackground';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
 import React from 'react';
 
 /**

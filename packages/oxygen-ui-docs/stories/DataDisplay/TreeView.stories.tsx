@@ -18,7 +18,7 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { TreeView } from '@wso2/oxygen-ui';
+import * as TreeView from '@wso2/oxygen-ui/tree-view';
 
 const { SimpleTreeView, TreeItem } = TreeView;
 

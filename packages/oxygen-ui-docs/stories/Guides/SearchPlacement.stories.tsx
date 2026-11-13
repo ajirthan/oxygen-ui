@@ -18,20 +18,18 @@
 
 import { Description, Primary, Subtitle, Title } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Stack,
-  Typography,
-  CodeBlock,
-  Box,
-  Divider,
-  ListingTable,
-  Button,
-  PageTitle,
-  Paper,
-  SearchBar,
-  ToggleButton,
-  ToggleButtonGroup,
-} from '@wso2/oxygen-ui';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import CodeBlock from '@wso2/oxygen-ui/CodeBlock';
+import Box from '@wso2/oxygen-ui/Box';
+import Divider from '@wso2/oxygen-ui/Divider';
+import ListingTable from '@wso2/oxygen-ui/ListingTable';
+import Button from '@wso2/oxygen-ui/Button';
+import PageTitle from '@wso2/oxygen-ui/PageTitle';
+import Paper from '@wso2/oxygen-ui/Paper';
+import SearchBar from '@wso2/oxygen-ui/SearchBar';
+import ToggleButton from '@wso2/oxygen-ui/ToggleButton';
+import ToggleButtonGroup from '@wso2/oxygen-ui/ToggleButtonGroup';
 import { ChevronDown, LayoutGrid, List as ListIcon } from '@wso2/oxygen-ui-icons-react';
 import React from 'react';
 import CenterContentLayout from '../../layouts/CenterContentLayout';

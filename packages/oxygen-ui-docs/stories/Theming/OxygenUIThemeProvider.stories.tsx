@@ -18,7 +18,14 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Stack, Typography, Box, CodeBlock, Paper, Button, OxygenUIThemeProvider, extendTheme } from '@wso2/oxygen-ui';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Box from '@wso2/oxygen-ui/Box';
+import CodeBlock from '@wso2/oxygen-ui/CodeBlock';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Button from '@wso2/oxygen-ui/Button';
+import OxygenUIThemeProvider from '@wso2/oxygen-ui/OxygenUIThemeProvider';
+import { extendTheme } from '@wso2/oxygen-ui/styles';
 
 /**
  * OxygenUIThemeProvider is the root theme provider component for Oxygen UI applications.

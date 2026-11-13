@@ -18,18 +18,16 @@
 
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Collapse,
-  Fade,
-  Grow,
-  Slide,
-  Zoom,
-  Box,
-  Button,
-  Paper,
-  Switch,
-  FormControlLabel,
-} from '@wso2/oxygen-ui';
+import Collapse from '@wso2/oxygen-ui/Collapse';
+import Fade from '@wso2/oxygen-ui/Fade';
+import Grow from '@wso2/oxygen-ui/Grow';
+import Slide from '@wso2/oxygen-ui/Slide';
+import Zoom from '@wso2/oxygen-ui/Zoom';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Switch from '@wso2/oxygen-ui/Switch';
+import FormControlLabel from '@wso2/oxygen-ui/FormControlLabel';
 import { Package } from '@wso2/oxygen-ui-icons-react';
 
 /**

@@ -16,7 +16,11 @@
  * under the License.
  */
 
-import { Box, Button, Typography, Card, CardContent } from '@wso2/oxygen-ui'
+import Box from '@wso2/oxygen-ui/Box'
+import Button from '@wso2/oxygen-ui/Button'
+import Typography from '@wso2/oxygen-ui/Typography'
+import Card from '@wso2/oxygen-ui/Card'
+import CardContent from '@wso2/oxygen-ui/CardContent'
 import { Home, RefreshCw, ArrowLeft, AlertCircle } from '@wso2/oxygen-ui-icons-react'
 import { useNavigate, useSearchParams } from 'react-router'
 import type { JSX } from 'react'

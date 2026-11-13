@@ -18,7 +18,13 @@
 
 import { Description, Primary, Subtitle, Title } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Stack, Typography, CodeBlock, Box, Divider, Chip, Sidebar } from '@wso2/oxygen-ui';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import CodeBlock from '@wso2/oxygen-ui/CodeBlock';
+import Box from '@wso2/oxygen-ui/Box';
+import Divider from '@wso2/oxygen-ui/Divider';
+import Chip from '@wso2/oxygen-ui/Chip';
+import Sidebar from '@wso2/oxygen-ui/Sidebar';
 import {
   Bell,
   Boxes,

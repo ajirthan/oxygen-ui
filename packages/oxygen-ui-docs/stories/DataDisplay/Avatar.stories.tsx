@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Avatar, AvatarGroup, Stack } from '@wso2/oxygen-ui';
+import Avatar from '@wso2/oxygen-ui/Avatar';
+import AvatarGroup from '@wso2/oxygen-ui/AvatarGroup';
+import Stack from '@wso2/oxygen-ui/Stack';
 import { Box, Layers, Package, ShieldCheck, TriangleAlert } from '@wso2/oxygen-ui-icons-react';
 import React from 'react';
 

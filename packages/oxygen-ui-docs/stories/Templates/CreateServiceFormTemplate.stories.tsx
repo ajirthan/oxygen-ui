@@ -18,16 +18,14 @@
 
 import React, { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import {
-  Button,
-  IconButton,
-  InputAdornment,
-  Box,
-  Form,
-  TextField,
-  Select,
-  MenuItem,
-} from '@wso2/oxygen-ui'
+import Button from '@wso2/oxygen-ui/Button'
+import IconButton from '@wso2/oxygen-ui/IconButton'
+import InputAdornment from '@wso2/oxygen-ui/InputAdornment'
+import Box from '@wso2/oxygen-ui/Box'
+import { Form } from '@wso2/oxygen-ui/Form'
+import TextField from '@wso2/oxygen-ui/TextField'
+import Select from '@wso2/oxygen-ui/Select'
+import MenuItem from '@wso2/oxygen-ui/MenuItem'
 import {
   CircleQuestionMark,
   PencilIcon,

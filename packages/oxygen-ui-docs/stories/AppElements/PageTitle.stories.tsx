@@ -17,7 +17,8 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { PageTitle, Button } from '@wso2/oxygen-ui';
+import PageTitle from '@wso2/oxygen-ui/PageTitle';
+import Button from '@wso2/oxygen-ui/Button';
 import { Link as LinkIcon, User, Folder } from '@wso2/oxygen-ui-icons-react';
 import React from 'react';
 

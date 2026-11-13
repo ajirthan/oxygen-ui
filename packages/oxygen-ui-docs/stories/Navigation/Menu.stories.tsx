@@ -17,7 +17,12 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Menu, MenuItem, Button, Divider, ListItemIcon, ListItemText } from '@wso2/oxygen-ui';
+import Menu from '@wso2/oxygen-ui/Menu';
+import MenuItem from '@wso2/oxygen-ui/MenuItem';
+import Button from '@wso2/oxygen-ui/Button';
+import Divider from '@wso2/oxygen-ui/Divider';
+import ListItemIcon from '@wso2/oxygen-ui/ListItemIcon';
+import ListItemText from '@wso2/oxygen-ui/ListItemText';
 import { User, Settings } from '@wso2/oxygen-ui-icons-react';
 import React, { useState } from 'react';
 

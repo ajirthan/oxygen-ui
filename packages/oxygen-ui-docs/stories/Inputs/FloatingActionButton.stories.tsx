@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Fab, Stack, Box } from '@wso2/oxygen-ui';
+import Fab from '@wso2/oxygen-ui/Fab';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Box from '@wso2/oxygen-ui/Box';
 import React from 'react';
 
 /**

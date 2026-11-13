@@ -16,7 +16,11 @@
  * under the License.
  */
 
-import { Box, Form, Stack, Tooltip, Typography } from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import { Form } from '@wso2/oxygen-ui/Form';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Tooltip from '@wso2/oxygen-ui/Tooltip';
+import Typography from '@wso2/oxygen-ui/Typography';
 import { CircleQuestionMark, type LucideIcon } from '@wso2/oxygen-ui-icons-react';
 import type { JSX } from 'react';
 

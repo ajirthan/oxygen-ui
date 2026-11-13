@@ -18,7 +18,14 @@
 
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { List, ListItem, ListItemText, Checkbox, Button, Paper, Box, ListItemIcon } from '@wso2/oxygen-ui';
+import List from '@wso2/oxygen-ui/List';
+import ListItem from '@wso2/oxygen-ui/ListItem';
+import ListItemText from '@wso2/oxygen-ui/ListItemText';
+import Checkbox from '@wso2/oxygen-ui/Checkbox';
+import Button from '@wso2/oxygen-ui/Button';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Box from '@wso2/oxygen-ui/Box';
+import ListItemIcon from '@wso2/oxygen-ui/ListItemIcon';
 
 /**
  * Transfer List allows users to move items between two lists.

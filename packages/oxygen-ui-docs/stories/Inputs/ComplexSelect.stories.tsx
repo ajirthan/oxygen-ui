@@ -18,7 +18,8 @@
 
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ComplexSelect, Box } from '@wso2/oxygen-ui';
+import ComplexSelect from '@wso2/oxygen-ui/ComplexSelect';
+import Box from '@wso2/oxygen-ui/Box';
 import { User, Users, ShieldCheck, Smartphone, Settings, Plus } from '@wso2/oxygen-ui-icons-react';
 
 const meta: Meta<typeof ComplexSelect> = {

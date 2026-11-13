@@ -16,34 +16,32 @@
  * under the License.
  */
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  Tabs,
-  Tab,
-  Divider,
-  FormControl,
-  FormLabel,
-  Switch,
-  FormControlLabel,
-  Select,
-  MenuItem,
-  PageTitle,
-  Chip,
-  List,
-  ListItem,
-  ListItemText,
-  Alert,
-  Grid,
-  Avatar,
-  ThemeSwitcher,
-  PageContent,
-  Autocomplete,
-} from '@wso2/oxygen-ui'
+import Box from '@wso2/oxygen-ui/Box'
+import Button from '@wso2/oxygen-ui/Button'
+import Card from '@wso2/oxygen-ui/Card'
+import CardContent from '@wso2/oxygen-ui/CardContent'
+import Typography from '@wso2/oxygen-ui/Typography'
+import TextField from '@wso2/oxygen-ui/TextField'
+import Tabs from '@wso2/oxygen-ui/Tabs'
+import Tab from '@wso2/oxygen-ui/Tab'
+import Divider from '@wso2/oxygen-ui/Divider'
+import FormControl from '@wso2/oxygen-ui/FormControl'
+import FormLabel from '@wso2/oxygen-ui/FormLabel'
+import Switch from '@wso2/oxygen-ui/Switch'
+import FormControlLabel from '@wso2/oxygen-ui/FormControlLabel'
+import Select from '@wso2/oxygen-ui/Select'
+import MenuItem from '@wso2/oxygen-ui/MenuItem'
+import PageTitle from '@wso2/oxygen-ui/PageTitle'
+import Chip from '@wso2/oxygen-ui/Chip'
+import List from '@wso2/oxygen-ui/List'
+import ListItem from '@wso2/oxygen-ui/ListItem'
+import ListItemText from '@wso2/oxygen-ui/ListItemText'
+import Alert from '@wso2/oxygen-ui/Alert'
+import Grid from '@wso2/oxygen-ui/Grid'
+import Avatar from '@wso2/oxygen-ui/Avatar'
+import ThemeSwitcher from '@wso2/oxygen-ui/ThemeSwitcher'
+import PageContent from '@wso2/oxygen-ui/PageContent'
+import Autocomplete from '@wso2/oxygen-ui/Autocomplete'
 import {
   Save,
   Building2,

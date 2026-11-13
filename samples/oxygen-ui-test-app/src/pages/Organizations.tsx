@@ -16,22 +16,20 @@
  * under the License.
  */
 
-import {
-  Box,
-  Button,
-  PageContent,
-  PageTitle,
-  Typography,
-  Chip,
-  IconButton,
-  SearchBarWithAdvancedFilter,
-  ListingTable,
-  Tooltip,
-  Card,
-  Grid,
-  Link,
-  type AdvancedFilterState,
-} from '@wso2/oxygen-ui'
+import Box from '@wso2/oxygen-ui/Box'
+import Button from '@wso2/oxygen-ui/Button'
+import PageContent from '@wso2/oxygen-ui/PageContent'
+import PageTitle from '@wso2/oxygen-ui/PageTitle'
+import Typography from '@wso2/oxygen-ui/Typography'
+import Chip from '@wso2/oxygen-ui/Chip'
+import IconButton from '@wso2/oxygen-ui/IconButton'
+import SearchBarWithAdvancedFilter from '@wso2/oxygen-ui/SearchBarWithAdvancedFilter'
+import ListingTable from '@wso2/oxygen-ui/ListingTable'
+import Tooltip from '@wso2/oxygen-ui/Tooltip'
+import Card from '@wso2/oxygen-ui/Card'
+import Grid from '@wso2/oxygen-ui/Grid'
+import Link from '@wso2/oxygen-ui/Link'
+import { type AdvancedFilterState } from '@wso2/oxygen-ui/SearchBar'
 import {
   Plus,
   Folder,

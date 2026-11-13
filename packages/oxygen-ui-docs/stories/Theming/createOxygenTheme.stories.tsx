@@ -18,7 +18,10 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Stack, Typography, CodeBlock, createOxygenTheme } from '@wso2/oxygen-ui';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import CodeBlock from '@wso2/oxygen-ui/CodeBlock';
+import { createOxygenTheme } from '@wso2/oxygen-ui/styles';
 
 /**
  * createOxygenTheme is a utility function for creating custom Oxygen UI themes.

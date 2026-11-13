@@ -18,7 +18,7 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { DataGrid } from '@wso2/oxygen-ui';
+import * as DataGrid from '@wso2/oxygen-ui/data-grid';
 
 const { DataGrid: DataGridComponent } = DataGrid;
 

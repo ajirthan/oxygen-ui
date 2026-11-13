@@ -18,8 +18,11 @@
 
 import { deDE } from '@mui/x-date-pickers/locales';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Chip, Stack, TimeRangeFilter, Typography } from '@wso2/oxygen-ui';
-import type { TimeRange } from '@wso2/oxygen-ui';
+import Chip from '@wso2/oxygen-ui/Chip';
+import Stack from '@wso2/oxygen-ui/Stack';
+import TimeRangeFilter from '@wso2/oxygen-ui/TimeRangeFilter';
+import Typography from '@wso2/oxygen-ui/Typography';
+import type { TimeRange } from '@wso2/oxygen-ui/TimeRangeFilter';
 import { de } from 'date-fns/locale';
 import React from 'react';
 

@@ -17,7 +17,10 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Divider, Box, Chip, Stack } from '@wso2/oxygen-ui';
+import Divider from '@wso2/oxygen-ui/Divider';
+import Box from '@wso2/oxygen-ui/Box';
+import Chip from '@wso2/oxygen-ui/Chip';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React from 'react';
 
 /**

@@ -17,7 +17,10 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Chip, Stack, Avatar, Box } from '@wso2/oxygen-ui';
+import Chip from '@wso2/oxygen-ui/Chip';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Avatar from '@wso2/oxygen-ui/Avatar';
+import Box from '@wso2/oxygen-ui/Box';
 import React from 'react';
 
 /**

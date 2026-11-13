@@ -17,15 +17,13 @@
  */
 
 import { Meta, StoryObj } from '@storybook/react';
-import {
-  Box,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Stack,
-} from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Button from '@wso2/oxygen-ui/Button';
+import Card from '@wso2/oxygen-ui/Card';
+import CardContent from '@wso2/oxygen-ui/CardContent';
+import Grid from '@wso2/oxygen-ui/Grid';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React from 'react';
 
 const meta: Meta = {

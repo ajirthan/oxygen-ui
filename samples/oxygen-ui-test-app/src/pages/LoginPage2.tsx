@@ -16,7 +16,15 @@
  * under the License.
  */
 
-import { Box, Divider, Grid, Link, Paper, Stack, styled, Typography, useThemeContent } from '@wso2/oxygen-ui'
+import Box from '@wso2/oxygen-ui/Box'
+import Divider from '@wso2/oxygen-ui/Divider'
+import Grid from '@wso2/oxygen-ui/Grid'
+import Link from '@wso2/oxygen-ui/Link'
+import Paper from '@wso2/oxygen-ui/Paper'
+import Stack from '@wso2/oxygen-ui/Stack'
+import { styled } from '@wso2/oxygen-ui/styles'
+import Typography from '@wso2/oxygen-ui/Typography'
+import useThemeContent from '@wso2/oxygen-ui/useThemeContent'
 import { type JSX } from 'react'
 import Logo from '../components/Logo'
 import LoginBox from '../components/LoginBox'

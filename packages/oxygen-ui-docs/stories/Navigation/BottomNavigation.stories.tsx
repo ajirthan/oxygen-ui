@@ -18,7 +18,9 @@
 
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { BottomNavigation, BottomNavigationAction, Paper } from '@wso2/oxygen-ui';
+import BottomNavigation from '@wso2/oxygen-ui/BottomNavigation';
+import BottomNavigationAction from '@wso2/oxygen-ui/BottomNavigationAction';
+import Paper from '@wso2/oxygen-ui/Paper';
 import { History, Star, Archive, Home, Search, User, Settings, Bell, Mail, MapPin } from '@wso2/oxygen-ui-icons-react';
 
 /**

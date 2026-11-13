@@ -18,7 +18,10 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ColorSchemeToggle, Stack, Typography, Paper } from '@wso2/oxygen-ui';
+import ColorSchemeToggle from '@wso2/oxygen-ui/ColorSchemeToggle';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Paper from '@wso2/oxygen-ui/Paper';
 
 const meta: Meta<typeof ColorSchemeToggle> = {
   title: 'Theming/ColorSchemeToggle',

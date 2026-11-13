@@ -17,7 +17,8 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Pagination, Stack } from '@wso2/oxygen-ui';
+import Pagination from '@wso2/oxygen-ui/Pagination';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React from 'react';
 
 /**

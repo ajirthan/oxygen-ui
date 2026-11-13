@@ -18,19 +18,17 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Box,
-  Button,
-  Chip,
-  Divider,
-  DrawerPanel,
-  IconButton,
-  RelativeTime,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Chip from '@wso2/oxygen-ui/Chip';
+import Divider from '@wso2/oxygen-ui/Divider';
+import DrawerPanel from '@wso2/oxygen-ui/DrawerPanel';
+import IconButton from '@wso2/oxygen-ui/IconButton';
+import RelativeTime from '@wso2/oxygen-ui/RelativeTime';
+import Stack from '@wso2/oxygen-ui/Stack';
+import TextField from '@wso2/oxygen-ui/TextField';
+import Tooltip from '@wso2/oxygen-ui/Tooltip';
+import Typography from '@wso2/oxygen-ui/Typography';
 import { GitBranch, GitCommitHorizontal, ListTree, Settings, Share2 } from '@wso2/oxygen-ui-icons-react';
 
 /**

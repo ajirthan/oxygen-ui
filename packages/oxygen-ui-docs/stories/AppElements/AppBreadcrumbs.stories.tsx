@@ -17,8 +17,8 @@
  */
 
 import type {Meta, StoryObj} from '@storybook/react';
-import {AppBreadcrumbs} from '@wso2/oxygen-ui';
-import type {BreadcrumbItem} from '@wso2/oxygen-ui';
+import AppBreadcrumbs from '@wso2/oxygen-ui/AppBreadcrumbs';
+import type { BreadcrumbItem } from '@wso2/oxygen-ui/AppBreadcrumbs';
 import React from 'react';
 
 /**

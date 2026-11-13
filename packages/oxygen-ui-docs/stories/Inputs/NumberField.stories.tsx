@@ -18,7 +18,7 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { TextField } from '@wso2/oxygen-ui';
+import TextField from '@wso2/oxygen-ui/TextField';
 
 /**
  * Number Field is a TextField with type="number" for numeric input.

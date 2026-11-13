@@ -18,7 +18,12 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Card, CardContent, CardActions, CardMedia, Button, Typography } from '@wso2/oxygen-ui';
+import Card from '@wso2/oxygen-ui/Card';
+import CardContent from '@wso2/oxygen-ui/CardContent';
+import CardActions from '@wso2/oxygen-ui/CardActions';
+import CardMedia from '@wso2/oxygen-ui/CardMedia';
+import Button from '@wso2/oxygen-ui/Button';
+import Typography from '@wso2/oxygen-ui/Typography';
 
 const meta: Meta<typeof Card> = {
   title: 'Surfaces/Card',

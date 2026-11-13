@@ -17,7 +17,12 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Box } from '@wso2/oxygen-ui';
+import AppBar from '@wso2/oxygen-ui/AppBar';
+import Toolbar from '@wso2/oxygen-ui/Toolbar';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Button from '@wso2/oxygen-ui/Button';
+import IconButton from '@wso2/oxygen-ui/IconButton';
+import Box from '@wso2/oxygen-ui/Box';
 import React from 'react';
 
 /**

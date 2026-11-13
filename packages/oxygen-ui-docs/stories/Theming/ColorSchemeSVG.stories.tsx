@@ -18,7 +18,13 @@
 
 import React from 'react';
 import type {Meta, StoryObj} from '@storybook/react';
-import {ColorSchemeSVG, ColorSchemeToggle, Stack, Typography, Paper, Box, Divider} from '@wso2/oxygen-ui';
+import ColorSchemeSVG from '@wso2/oxygen-ui/ColorSchemeSVG';
+import ColorSchemeToggle from '@wso2/oxygen-ui/ColorSchemeToggle';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Box from '@wso2/oxygen-ui/Box';
+import Divider from '@wso2/oxygen-ui/Divider';
 import DashboardIllustration from './assets/dashboard-illustration.svg?react';
 import DashboardIllustrationLight from './assets/dashboard-illustration-light.svg?react';
 import DashboardIllustrationDark from './assets/dashboard-illustration-dark.svg?react';

@@ -18,7 +18,18 @@
 
 import { Description, Primary, Subtitle, Title } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Stack, Typography, CodeBlock, Box, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@wso2/oxygen-ui';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import CodeBlock from '@wso2/oxygen-ui/CodeBlock';
+import Box from '@wso2/oxygen-ui/Box';
+import Divider from '@wso2/oxygen-ui/Divider';
+import Table from '@wso2/oxygen-ui/Table';
+import TableBody from '@wso2/oxygen-ui/TableBody';
+import TableCell from '@wso2/oxygen-ui/TableCell';
+import TableContainer from '@wso2/oxygen-ui/TableContainer';
+import TableHead from '@wso2/oxygen-ui/TableHead';
+import TableRow from '@wso2/oxygen-ui/TableRow';
+import Paper from '@wso2/oxygen-ui/Paper';
 import React from 'react';
 import CenterContentLayout from '../layouts/CenterContentLayout';
 

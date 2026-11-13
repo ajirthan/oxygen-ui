@@ -18,16 +18,14 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  AppSwitcher,
-  Box,
-  Button,
-  ColorSchemeToggle,
-  Header,
-  Typography,
-  UserMenu,
-} from '@wso2/oxygen-ui';
-import type { AppSwitcherAppItem, AppSwitcherFooterLink } from '@wso2/oxygen-ui';
+import AppSwitcher from '@wso2/oxygen-ui/AppSwitcher';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import ColorSchemeToggle from '@wso2/oxygen-ui/ColorSchemeToggle';
+import Header from '@wso2/oxygen-ui/Header';
+import Typography from '@wso2/oxygen-ui/Typography';
+import UserMenu from '@wso2/oxygen-ui/UserMenu';
+import type { AppSwitcherAppItem, AppSwitcherFooterLink } from '@wso2/oxygen-ui/AppSwitcher';
 import { Home, Settings } from '@wso2/oxygen-ui-icons-react';
 
 /**
