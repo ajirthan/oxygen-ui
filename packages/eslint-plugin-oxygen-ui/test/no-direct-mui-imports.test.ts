@@ -16,11 +16,11 @@
  * under the License.
  */
 
-import {mkdirSync, mkdtempSync, writeFileSync} from 'node:fs';
+import {mkdirSync, mkdtempSync, utimesSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {RuleTester} from 'eslint';
-import {describe, it} from 'vitest';
+import {Linter, RuleTester} from 'eslint';
+import {describe, expect, it} from 'vitest';
 import rule from '../src/rules/no-direct-mui-imports.js';
 
 RuleTester.describe = describe;
@@ -31,11 +31,16 @@ const map = {
   Button: {path: '@wso2/oxygen-ui/Button', kind: 'default', typeOnly: false},
   buttonClasses: {path: '@wso2/oxygen-ui/Button', kind: 'named', typeOnly: false},
   styled: {path: '@wso2/oxygen-ui/styles', kind: 'named', typeOnly: false},
+  ButtonProps: {path: '@wso2/oxygen-ui/Button', kind: 'named', typeOnly: true},
   DataGrid: {path: '@wso2/oxygen-ui/data-grid', kind: 'namespace', typeOnly: false},
+  DatePickers: {path: '@wso2/oxygen-ui/date-pickers', kind: 'namespace', typeOnly: false},
+  TreeView: {path: '@wso2/oxygen-ui/tree-view', kind: 'namespace', typeOnly: false},
+  AdapterDateFns: {path: '@wso2/oxygen-ui/date-pickers/AdapterDateFns', kind: 'named', typeOnly: false},
 };
 
-const installApp = (withMap: boolean): string => {
+const installApp = (withMap: boolean, tsconfig?: object): string => {
   const app = mkdtempSync(path.join(tmpdir(), 'lint-app-'));
+  if (tsconfig) writeFileSync(path.join(app, 'tsconfig.json'), JSON.stringify(tsconfig));
   const oxygen = path.join(app, 'node_modules/@wso2/oxygen-ui');
   mkdirSync(oxygen, {recursive: true});
   writeFileSync(
@@ -48,6 +53,43 @@ const installApp = (withMap: boolean): string => {
 
 const filename = installApp(true);
 const filenameWithoutMap = installApp(false);
+const legacyResolution = installApp(true, {compilerOptions: {moduleResolution: 'node'}});
+const legacyByModule = installApp(true, {compilerOptions: {module: 'commonjs'}});
+const bundlerResolution = installApp(true, {compilerOptions: {moduleResolution: 'Bundler'}});
+
+const lint = (source: string, file: string) =>
+  new Linter({cwd: path.resolve(path.dirname(file), '..')}).verify(
+    source,
+    [{files: ['**/*.tsx'], plugins: {oxygen: {rules: {r: rule}}}, rules: {'oxygen/r': 'error'}, languageOptions: {ecmaVersion: 2022, sourceType: 'module'}}],
+    {filename: file},
+  );
+
+describe('the fix of the Material UI root', () => {
+  it('keeps type-only names type-only', () => {
+    const [message] = lint(`import { Button, ButtonProps } from '@mui/material';`, filename);
+    expect(message.fix?.text).toBe(
+      `import Button from '@wso2/oxygen-ui/Button';\nimport type {ButtonProps} from '@wso2/oxygen-ui/Button';`,
+    );
+  });
+});
+
+describe('the path map of the installed package', () => {
+  it('is read again after the installed package changes', () => {
+    const file = installApp(false);
+    const source = `import { Box } from '@mui/material';`;
+    const fixed = () => lint(source, file)[0].fix?.text ?? source;
+    expect(fixed()).toBe(source);
+
+    const oxygen = path.join(path.dirname(file), '../node_modules/@wso2/oxygen-ui');
+    writeFileSync(path.join(oxygen, 'package.json'), JSON.stringify({name: '@wso2/oxygen-ui', exports: {'./path-map.json': './path-map.json'}}));
+    writeFileSync(path.join(oxygen, 'path-map.json'), JSON.stringify(map));
+    expect(fixed()).toBe(`import Box from '@wso2/oxygen-ui/Box';`);
+
+    writeFileSync(path.join(oxygen, 'path-map.json'), JSON.stringify({Box: {path: '@wso2/oxygen-ui/Container', kind: 'default', typeOnly: false}}));
+    utimesSync(path.join(oxygen, 'path-map.json'), new Date(), new Date(Date.now() + 5000));
+    expect(fixed()).toBe(`import Box from '@wso2/oxygen-ui/Container';`);
+  });
+});
 
 const tester = new RuleTester({languageOptions: {ecmaVersion: 2022, sourceType: 'module'}});
 
@@ -120,6 +162,69 @@ tester.run('no-direct-mui-imports', rule, {
       code: `import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';`,
       output: `import { AdapterDateFns } from '@wso2/oxygen-ui/date-pickers/AdapterDateFns';`,
       errors: [{messageId: 'noDirectMuiXImport'}],
+      filename,
+    },
+    {
+      name: 'a Material UI path the installed package does not have is reported and left alone',
+      code: `import Grid from '@mui/material/Grid2';`,
+      output: null,
+      errors: [{messageId: 'noDirectMuiSubpathImport'}],
+      filename,
+    },
+    {
+      name: 'a Material UI path import is left alone when a named import is not on that path',
+      code: `import {styled} from '@mui/material/Button';`,
+      output: null,
+      errors: [{messageId: 'noDirectMuiSubpathImport'}],
+      filename,
+    },
+    {
+      name: 'a Material UI path import is left alone when the installed package has no map',
+      code: `import Button from '@mui/material/Button';`,
+      output: null,
+      errors: [{messageId: 'noDirectMuiSubpathImport'}],
+      filename: filenameWithoutMap,
+    },
+    {
+      name: 'no fix is written for the legacy node module resolution',
+      code: `import Button from '@mui/material/Button';\nimport { Box } from '@mui/material';`,
+      output: null,
+      errors: [{messageId: 'noDirectMuiSubpathImport'}, {messageId: 'noDirectMuiImport'}],
+      filename: legacyResolution,
+    },
+    {
+      name: 'no fix is written when module commonjs implies the legacy resolution',
+      code: `import Button from '@mui/material/Button';`,
+      output: null,
+      errors: [{messageId: 'noDirectMuiSubpathImport'}],
+      filename: legacyByModule,
+    },
+    {
+      name: 'the bundler module resolution gets the fix',
+      code: `import Button from '@mui/material/Button';`,
+      output: `import Button from '@wso2/oxygen-ui/Button';`,
+      errors: [{messageId: 'noDirectMuiSubpathImport'}],
+      filename: bundlerResolution,
+    },
+    {
+      name: 'the Material UI root fix keeps a file without semicolons without them',
+      code: `import { Box } from '@mui/material'`,
+      output: `import Box from '@wso2/oxygen-ui/Box'`,
+      errors: [{messageId: 'noDirectMuiImport'}],
+      filename,
+    },
+    {
+      name: 'an import with a comment inside is reported and left alone',
+      code: `import {\n  Box, // layout\n  Button,\n} from '@mui/material';`,
+      output: null,
+      errors: [{messageId: 'noDirectMuiImport'}],
+      filename,
+    },
+    {
+      name: 'an MUI X package without an Oxygen path says so',
+      code: `import { BarChart } from '@mui/x-charts';`,
+      output: null,
+      errors: [{messageId: 'noDirectMuiXUnavailable'}],
       filename,
     },
     {
