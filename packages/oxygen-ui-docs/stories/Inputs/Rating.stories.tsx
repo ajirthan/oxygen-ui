@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Rating, Stack, Typography } from '@wso2/oxygen-ui';
+import Rating from '@wso2/oxygen-ui/Rating';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
 import React, { useState } from 'react';
 
 /**

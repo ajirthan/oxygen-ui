@@ -17,7 +17,15 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, Checkbox } from '@wso2/oxygen-ui';
+import Table from '@wso2/oxygen-ui/Table';
+import TableBody from '@wso2/oxygen-ui/TableBody';
+import TableCell from '@wso2/oxygen-ui/TableCell';
+import TableContainer from '@wso2/oxygen-ui/TableContainer';
+import TableHead from '@wso2/oxygen-ui/TableHead';
+import TableRow from '@wso2/oxygen-ui/TableRow';
+import Paper from '@wso2/oxygen-ui/Paper';
+import TablePagination from '@wso2/oxygen-ui/TablePagination';
+import Checkbox from '@wso2/oxygen-ui/Checkbox';
 import React, { useState } from 'react';
 
 /**

@@ -43,7 +43,9 @@ pnpm add @wso2/oxygen-ui @wso2/oxygen-ui-charts-react
 Import any Material-UI or Oxygen-UI custom component:
 
 ```jsx
-import { OxygenUIThemeProvider, Button, TextField } from '@wso2/oxygen-ui';
+import OxygenUIThemeProvider from '@wso2/oxygen-ui/OxygenUIThemeProvider';
+import Button from '@wso2/oxygen-ui/Button';
+import TextField from '@wso2/oxygen-ui/TextField';
 
 function App() {
   return (
@@ -55,7 +57,9 @@ function App() {
 }
 ```
 
-> **Note**: `import { Button } from '@wso2/oxygen-ui'` is equivalent to `import { Button } from '@mui/material'`
+> **Note**: `import Button from '@wso2/oxygen-ui/Button'` gives the same component as `import Button from '@mui/material/Button'`, with the Oxygen theme applied. The barrel import, `import { Button } from '@wso2/oxygen-ui'`, is still supported.
+>
+> Path imports need `moduleResolution` set to `bundler`, `node16` or `nodenext`. To move an existing app from barrel imports to path imports, run `npx @wso2/oxygen-ui-codemod path-imports`, and add `--check` in CI to list the barrel imports that remain. The [package README](packages/oxygen-ui/README.md) has the full list of paths.
 
 Refer to [Material-UI documentation](https://mui.com/material-ui/all-components/) for component usage details.
 
@@ -64,7 +68,7 @@ Refer to [Material-UI documentation](https://mui.com/material-ui/all-components/
 For DataGrid and DatePickers, use namespace imports:
 
 ```jsx
-import { DataGrid } from '@wso2/oxygen-ui';
+import * as DataGrid from '@wso2/oxygen-ui/data-grid';
 
 function MyDataGrid() {
   return (

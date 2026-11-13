@@ -17,7 +17,10 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Breadcrumbs, Link, Typography, Stack } from '@wso2/oxygen-ui';
+import Breadcrumbs from '@wso2/oxygen-ui/Breadcrumbs';
+import Link from '@wso2/oxygen-ui/Link';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React from 'react';
 
 /**

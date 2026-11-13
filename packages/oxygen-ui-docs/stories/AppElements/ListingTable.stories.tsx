@@ -17,23 +17,20 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  ListingTable,
-  DataGrid,
-  Button,
-  Checkbox,
-  Chip,
-  IconButton,
-  Stack,
-  TablePagination,
-  Tooltip,
-  Box,
-  Typography,
-  Autocomplete,
-  TextField,
-  useListingTable,
-} from '@wso2/oxygen-ui';
-import type { ListingTableDensity, ListingTableDataGridProps, ListingTableSortDirection, ListingTableVariant } from '@wso2/oxygen-ui';
+import ListingTable, { useListingTable } from '@wso2/oxygen-ui/ListingTable';
+import * as DataGrid from '@wso2/oxygen-ui/data-grid';
+import Button from '@wso2/oxygen-ui/Button';
+import Checkbox from '@wso2/oxygen-ui/Checkbox';
+import Chip from '@wso2/oxygen-ui/Chip';
+import IconButton from '@wso2/oxygen-ui/IconButton';
+import Stack from '@wso2/oxygen-ui/Stack';
+import TablePagination from '@wso2/oxygen-ui/TablePagination';
+import Tooltip from '@wso2/oxygen-ui/Tooltip';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Autocomplete from '@wso2/oxygen-ui/Autocomplete';
+import TextField from '@wso2/oxygen-ui/TextField';
+import type { ListingTableDensity, ListingTableDataGridProps, ListingTableSortDirection, ListingTableVariant } from '@wso2/oxygen-ui/ListingTable';
 import {
   Edit,
   Trash2,

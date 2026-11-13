@@ -17,7 +17,12 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { useTheme, Paper, Typography, Stack, Box, Chip } from '@wso2/oxygen-ui';
+import { useTheme } from '@wso2/oxygen-ui/styles';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Box from '@wso2/oxygen-ui/Box';
+import Chip from '@wso2/oxygen-ui/Chip';
 import React from 'react';
 
 // Demonstration component using useTheme hook

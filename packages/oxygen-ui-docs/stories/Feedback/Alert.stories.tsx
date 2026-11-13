@@ -17,7 +17,10 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Alert, AlertTitle, Stack, Button } from '@wso2/oxygen-ui';
+import Alert from '@wso2/oxygen-ui/Alert';
+import AlertTitle from '@wso2/oxygen-ui/AlertTitle';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Button from '@wso2/oxygen-ui/Button';
 import React from 'react';
 
 /**

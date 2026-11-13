@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Autocomplete, TextField, Stack } from '@wso2/oxygen-ui';
+import Autocomplete from '@wso2/oxygen-ui/Autocomplete';
+import TextField from '@wso2/oxygen-ui/TextField';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React from 'react';
 
 /**

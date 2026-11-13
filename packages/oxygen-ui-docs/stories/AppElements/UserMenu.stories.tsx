@@ -18,7 +18,9 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { UserMenu, Box, Typography } from '@wso2/oxygen-ui';
+import UserMenu from '@wso2/oxygen-ui/UserMenu';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
 import {
   User as ProfileIcon,
   Settings,

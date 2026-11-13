@@ -18,20 +18,18 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-    OxygenUIThemeProvider,
-    useThemeContent,
-    Stack,
-    Typography,
-    Paper,
-    Box,
-    ThemeSwitcher,
-    Card,
-    CardContent,
-    Avatar,
-    Chip,
-    extendTheme
-} from '@wso2/oxygen-ui';
+import OxygenUIThemeProvider from '@wso2/oxygen-ui/OxygenUIThemeProvider';
+import useThemeContent from '@wso2/oxygen-ui/useThemeContent';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Box from '@wso2/oxygen-ui/Box';
+import ThemeSwitcher from '@wso2/oxygen-ui/ThemeSwitcher';
+import Card from '@wso2/oxygen-ui/Card';
+import CardContent from '@wso2/oxygen-ui/CardContent';
+import Avatar from '@wso2/oxygen-ui/Avatar';
+import Chip from '@wso2/oxygen-ui/Chip';
+import { extendTheme } from '@wso2/oxygen-ui/styles';
 import { Smartphone, Settings, Plus } from '@wso2/oxygen-ui-icons-react';
 
 // Define example themes for stories

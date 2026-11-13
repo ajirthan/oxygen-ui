@@ -17,7 +17,12 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { List, ListItem, ListItemButton, ListItemText, ListItemIcon, Divider } from '@wso2/oxygen-ui';
+import List from '@wso2/oxygen-ui/List';
+import ListItem from '@wso2/oxygen-ui/ListItem';
+import ListItemButton from '@wso2/oxygen-ui/ListItemButton';
+import ListItemText from '@wso2/oxygen-ui/ListItemText';
+import ListItemIcon from '@wso2/oxygen-ui/ListItemIcon';
+import Divider from '@wso2/oxygen-ui/Divider';
 import { Mail, FileText, Send } from '@wso2/oxygen-ui-icons-react';
 import React from 'react';
 

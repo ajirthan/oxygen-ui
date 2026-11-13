@@ -18,7 +18,11 @@
 
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon, Box, Backdrop } from '@wso2/oxygen-ui';
+import SpeedDial from '@wso2/oxygen-ui/SpeedDial';
+import SpeedDialAction from '@wso2/oxygen-ui/SpeedDialAction';
+import SpeedDialIcon from '@wso2/oxygen-ui/SpeedDialIcon';
+import Box from '@wso2/oxygen-ui/Box';
+import Backdrop from '@wso2/oxygen-ui/Backdrop';
 import { Copy, Save, Printer, Share, Zap } from '@wso2/oxygen-ui-icons-react';
 
 /**

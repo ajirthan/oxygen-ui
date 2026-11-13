@@ -17,7 +17,11 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { PageContent, Card, CardContent, Typography, Box } from '@wso2/oxygen-ui';
+import PageContent from '@wso2/oxygen-ui/PageContent';
+import Card from '@wso2/oxygen-ui/Card';
+import CardContent from '@wso2/oxygen-ui/CardContent';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Box from '@wso2/oxygen-ui/Box';
 import React from 'react';
 
 /**

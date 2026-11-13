@@ -21,6 +21,7 @@ import type {} from '@mui/x-data-grid/themeAugmentation';
 import { ChevronDown, X } from '@wso2/oxygen-ui-icons-react';
 import React from 'react';
 import { pxToRem } from '../utils';
+import '../fonts.css';
 
 // Define custom theme properties interface
 interface CustomThemeProperties {

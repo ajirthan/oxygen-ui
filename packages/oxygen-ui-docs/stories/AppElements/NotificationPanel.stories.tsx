@@ -18,7 +18,11 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { NotificationPanel, Box, Button, Avatar, Typography } from '@wso2/oxygen-ui';
+import NotificationPanel from '@wso2/oxygen-ui/NotificationPanel';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Avatar from '@wso2/oxygen-ui/Avatar';
+import Typography from '@wso2/oxygen-ui/Typography';
 import {
   Bell,
   AlertTriangle,

@@ -16,24 +16,22 @@
  * under the License.
  */
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  Stack,
-  IconButton,
-  Divider,
-  Grid,
-  Avatar,
-  SearchBar,
-  PageTitle,
-  PageContent,
-  ListingTable,
-  Chip,
-  DataGrid,
-} from '@wso2/oxygen-ui'
+import Box from '@wso2/oxygen-ui/Box'
+import Button from '@wso2/oxygen-ui/Button'
+import Card from '@wso2/oxygen-ui/Card'
+import CardContent from '@wso2/oxygen-ui/CardContent'
+import Typography from '@wso2/oxygen-ui/Typography'
+import Stack from '@wso2/oxygen-ui/Stack'
+import IconButton from '@wso2/oxygen-ui/IconButton'
+import Divider from '@wso2/oxygen-ui/Divider'
+import Grid from '@wso2/oxygen-ui/Grid'
+import Avatar from '@wso2/oxygen-ui/Avatar'
+import SearchBar from '@wso2/oxygen-ui/SearchBar'
+import PageTitle from '@wso2/oxygen-ui/PageTitle'
+import PageContent from '@wso2/oxygen-ui/PageContent'
+import ListingTable from '@wso2/oxygen-ui/ListingTable'
+import Chip from '@wso2/oxygen-ui/Chip'
+import * as DataGrid from '@wso2/oxygen-ui/data-grid'
 import { LineChart } from '@wso2/oxygen-ui-charts-react'
 import { Clock, Plus, RefreshCw, Info, Link as LinkIcon } from '@wso2/oxygen-ui-icons-react'
 import type { JSX } from 'react'

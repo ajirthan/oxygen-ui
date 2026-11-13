@@ -18,23 +18,21 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Button,
-  Stack,
-  Chip,
-  AppShell,
-  Header,
-  Sidebar,
-  NotificationPanel,
-  IconButton,
-  Badge,
-  Tooltip,
-  useAppShell,
-} from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Card from '@wso2/oxygen-ui/Card';
+import CardContent from '@wso2/oxygen-ui/CardContent';
+import Button from '@wso2/oxygen-ui/Button';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Chip from '@wso2/oxygen-ui/Chip';
+import AppShell from '@wso2/oxygen-ui/AppShell';
+import Header from '@wso2/oxygen-ui/Header';
+import Sidebar from '@wso2/oxygen-ui/Sidebar';
+import NotificationPanel from '@wso2/oxygen-ui/NotificationPanel';
+import IconButton from '@wso2/oxygen-ui/IconButton';
+import Badge from '@wso2/oxygen-ui/Badge';
+import Tooltip from '@wso2/oxygen-ui/Tooltip';
+import useAppShell from '@wso2/oxygen-ui/useAppShell';
 import { Home, Settings, Users, Menu, Bell } from '@wso2/oxygen-ui-icons-react';
 
 const meta: Meta = {

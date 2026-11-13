@@ -18,6 +18,7 @@
 
 import { extendTheme } from '@mui/material/styles';
 import type { TypographyVariant, TypographyVariantsOptions } from '@mui/material/styles';
+import '../../fonts-sora.css';
 import OxygenThemeBase from '../OxygenThemeBase';
 import { createOxygenTheme } from '../../utils/createOxygenTheme';
 import type { OxygenTheme } from '../OxygenThemeBase';

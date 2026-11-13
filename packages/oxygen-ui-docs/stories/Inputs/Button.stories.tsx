@@ -17,7 +17,10 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, Stack, CircularProgress, useTheme } from '@wso2/oxygen-ui';
+import Button from '@wso2/oxygen-ui/Button';
+import Stack from '@wso2/oxygen-ui/Stack';
+import CircularProgress from '@wso2/oxygen-ui/CircularProgress';
+import { useTheme } from '@wso2/oxygen-ui/styles';
 import { ArrowRight, Download, Plus, Trash2 } from '@wso2/oxygen-ui-icons-react';
 import React from 'react';
 

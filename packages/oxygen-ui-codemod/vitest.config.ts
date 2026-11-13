@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025, WSO2 LLC. (https://www.wso2.com).
+ * Copyright (c) 2026, WSO2 LLC. (https://www.wso2.com).
  *
  * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -16,23 +16,8 @@
  * under the License.
  */
 
-import esbuild from 'esbuild';
-import { readFileSync } from 'fs';
+import { defineConfig } from 'vitest/config';
 
-const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
-
-await esbuild.build({
-  entryPoints: ['index.mjs'],
-  outdir: 'dist',
-  bundle: true,
-  format: 'esm',
-  platform: 'node',
-  sourcemap: true,
-  minify: false,
-  target: ['node25'],
-  external: [
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.peerDependencies || {}),
-    'vite'
-],
+export default defineConfig({
+  test: { environment: 'node' },
 });

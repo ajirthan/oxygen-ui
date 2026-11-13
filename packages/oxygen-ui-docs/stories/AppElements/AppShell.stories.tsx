@@ -18,37 +18,34 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  Button,
-  AppShell,
-  ColorSchemeToggle,
-  IconButton,
-  Tooltip,
-  Badge,
-  Divider,
-  Header,
-  Sidebar,
-  NotificationPanel,
-  UserMenu,
-  NotificationBanner,
-  Footer,
-  TrialBadge,
-  ComplexSelect,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  formatRelativeTime,
-  useAppShell,
-  useNotifications,
-  type NotificationItem,
-} from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Card from '@wso2/oxygen-ui/Card';
+import CardContent from '@wso2/oxygen-ui/CardContent';
+import Grid from '@wso2/oxygen-ui/Grid';
+import Button from '@wso2/oxygen-ui/Button';
+import AppShell from '@wso2/oxygen-ui/AppShell';
+import ColorSchemeToggle from '@wso2/oxygen-ui/ColorSchemeToggle';
+import IconButton from '@wso2/oxygen-ui/IconButton';
+import Tooltip from '@wso2/oxygen-ui/Tooltip';
+import Badge from '@wso2/oxygen-ui/Badge';
+import Divider from '@wso2/oxygen-ui/Divider';
+import Header from '@wso2/oxygen-ui/Header';
+import Sidebar from '@wso2/oxygen-ui/Sidebar';
+import NotificationPanel from '@wso2/oxygen-ui/NotificationPanel';
+import UserMenu from '@wso2/oxygen-ui/UserMenu';
+import NotificationBanner from '@wso2/oxygen-ui/NotificationBanner';
+import Footer from '@wso2/oxygen-ui/Footer';
+import TrialBadge from '@wso2/oxygen-ui/TrialBadge';
+import ComplexSelect from '@wso2/oxygen-ui/ComplexSelect';
+import Dialog from '@wso2/oxygen-ui/Dialog';
+import DialogTitle from '@wso2/oxygen-ui/DialogTitle';
+import DialogContent from '@wso2/oxygen-ui/DialogContent';
+import DialogContentText from '@wso2/oxygen-ui/DialogContentText';
+import DialogActions from '@wso2/oxygen-ui/DialogActions';
+import { formatRelativeTime } from '@wso2/oxygen-ui/utils';
+import useAppShell from '@wso2/oxygen-ui/useAppShell';
+import useNotifications, { type NotificationItem } from '@wso2/oxygen-ui/useNotifications';
 import {
   Zap,
   Bell,

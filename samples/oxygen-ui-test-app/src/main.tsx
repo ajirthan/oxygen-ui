@@ -16,19 +16,16 @@
  * under the License.
  */
 
-import {
-  OxygenUIThemeProvider,
-  AcrylicOrangeTheme,
-  AcrylicPurpleTheme,
-  ChoreoLabsTheme,
-  ClassicTheme,
-  HighContrastTheme,
-  PaleGrayTheme,
-  PaleIndigoTheme,
-  WSO2Theme,
-  createOxygenTheme,
-  type OxygenThemeType,
-} from '@wso2/oxygen-ui'
+import OxygenUIThemeProvider from '@wso2/oxygen-ui/OxygenUIThemeProvider'
+import AcrylicOrangeTheme from '@wso2/oxygen-ui/AcrylicOrangeTheme'
+import AcrylicPurpleTheme from '@wso2/oxygen-ui/AcrylicPurpleTheme'
+import ChoreoLabsTheme from '@wso2/oxygen-ui/ChoreoLabsTheme'
+import ClassicTheme from '@wso2/oxygen-ui/ClassicTheme'
+import HighContrastTheme from '@wso2/oxygen-ui/HighContrastTheme'
+import PaleGrayTheme from '@wso2/oxygen-ui/PaleGrayTheme'
+import PaleIndigoTheme from '@wso2/oxygen-ui/PaleIndigoTheme'
+import WSO2Theme from '@wso2/oxygen-ui/WSO2Theme'
+import { createOxygenTheme, type OxygenThemeType } from '@wso2/oxygen-ui/styles'
 import { HashRouter, BrowserRouter } from 'react-router'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Backdrop, Button, CircularProgress } from '@wso2/oxygen-ui';
+import Backdrop from '@wso2/oxygen-ui/Backdrop';
+import Button from '@wso2/oxygen-ui/Button';
+import CircularProgress from '@wso2/oxygen-ui/CircularProgress';
 import React, { useState } from 'react';
 
 /**

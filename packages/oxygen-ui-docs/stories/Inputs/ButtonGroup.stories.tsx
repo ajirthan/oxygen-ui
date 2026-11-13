@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, ButtonGroup, Stack } from '@wso2/oxygen-ui';
+import Button from '@wso2/oxygen-ui/Button';
+import ButtonGroup from '@wso2/oxygen-ui/ButtonGroup';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React from 'react';
 
 /**

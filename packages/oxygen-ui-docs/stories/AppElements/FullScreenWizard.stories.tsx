@@ -19,33 +19,30 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import {
-  Alert,
-  AppBreadcrumbs,
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Form,
-  FullScreenWizard,
-  Paper,
-  Radio,
-  RadioGroup,
-  Stack,
-  Step,
-  StepLabel,
-  Stepper,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-  useWizardSteps,
-} from '@wso2/oxygen-ui';
-import type { BreadcrumbItem } from '@wso2/oxygen-ui';
+import Alert from '@wso2/oxygen-ui/Alert';
+import AppBreadcrumbs from '@wso2/oxygen-ui/AppBreadcrumbs';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Checkbox from '@wso2/oxygen-ui/Checkbox';
+import Divider from '@wso2/oxygen-ui/Divider';
+import FormControl from '@wso2/oxygen-ui/FormControl';
+import FormControlLabel from '@wso2/oxygen-ui/FormControlLabel';
+import FormGroup from '@wso2/oxygen-ui/FormGroup';
+import FormLabel from '@wso2/oxygen-ui/FormLabel';
+import { Form } from '@wso2/oxygen-ui/Form';
+import FullScreenWizard, { useWizardSteps } from '@wso2/oxygen-ui/FullScreenWizard';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Radio from '@wso2/oxygen-ui/Radio';
+import RadioGroup from '@wso2/oxygen-ui/RadioGroup';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Step from '@wso2/oxygen-ui/Step';
+import StepLabel from '@wso2/oxygen-ui/StepLabel';
+import Stepper from '@wso2/oxygen-ui/Stepper';
+import TextField from '@wso2/oxygen-ui/TextField';
+import ToggleButton from '@wso2/oxygen-ui/ToggleButton';
+import ToggleButtonGroup from '@wso2/oxygen-ui/ToggleButtonGroup';
+import Typography from '@wso2/oxygen-ui/Typography';
+import type { BreadcrumbItem } from '@wso2/oxygen-ui/AppBreadcrumbs';
 import { Building2, FolderPlus, Lock, Sparkles, UserPlus } from '@wso2/oxygen-ui-icons-react';
 
 /**

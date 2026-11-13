@@ -17,7 +17,13 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { ThemeSwitcher, Stack, Typography, Box, OxygenUIThemeProvider, extendTheme, CodeBlock } from '@wso2/oxygen-ui';
+import ThemeSwitcher from '@wso2/oxygen-ui/ThemeSwitcher';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Box from '@wso2/oxygen-ui/Box';
+import OxygenUIThemeProvider from '@wso2/oxygen-ui/OxygenUIThemeProvider';
+import { extendTheme } from '@wso2/oxygen-ui/styles';
+import CodeBlock from '@wso2/oxygen-ui/CodeBlock';
 import React from 'react';
 
 // Define example themes for stories

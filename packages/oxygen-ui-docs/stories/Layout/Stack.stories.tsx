@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Stack, Paper, Divider } from '@wso2/oxygen-ui';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Divider from '@wso2/oxygen-ui/Divider';
 import React from 'react';
 
 /**

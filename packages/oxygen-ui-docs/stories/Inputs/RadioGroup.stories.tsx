@@ -17,7 +17,12 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Stack } from '@wso2/oxygen-ui';
+import Radio from '@wso2/oxygen-ui/Radio';
+import RadioGroup from '@wso2/oxygen-ui/RadioGroup';
+import FormControlLabel from '@wso2/oxygen-ui/FormControlLabel';
+import FormControl from '@wso2/oxygen-ui/FormControl';
+import FormLabel from '@wso2/oxygen-ui/FormLabel';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React, { useState } from 'react';
 
 /**

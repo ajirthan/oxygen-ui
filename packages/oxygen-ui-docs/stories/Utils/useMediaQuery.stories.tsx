@@ -18,7 +18,10 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { useMediaQuery, useTheme, Typography, Box } from '@wso2/oxygen-ui';
+import useMediaQuery from '@wso2/oxygen-ui/useMediaQuery';
+import { useTheme } from '@wso2/oxygen-ui/styles';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Box from '@wso2/oxygen-ui/Box';
 
 /**
  * useMediaQuery is a CSS media query hook for React.

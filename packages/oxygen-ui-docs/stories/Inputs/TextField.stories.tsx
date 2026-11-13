@@ -17,7 +17,7 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { TextField } from '@wso2/oxygen-ui';
+import TextField from '@wso2/oxygen-ui/TextField';
 
 const meta: Meta<typeof TextField> = {
   title: 'Inputs/TextField',

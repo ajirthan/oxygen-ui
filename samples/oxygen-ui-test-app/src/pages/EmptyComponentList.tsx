@@ -16,15 +16,13 @@
  * under the License.
  */
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  IconButton,
-  Grid,
-} from '@wso2/oxygen-ui'
+import Box from '@wso2/oxygen-ui/Box'
+import Button from '@wso2/oxygen-ui/Button'
+import Card from '@wso2/oxygen-ui/Card'
+import CardContent from '@wso2/oxygen-ui/CardContent'
+import Typography from '@wso2/oxygen-ui/Typography'
+import IconButton from '@wso2/oxygen-ui/IconButton'
+import Grid from '@wso2/oxygen-ui/Grid'
 import { ArrowLeft, Plus, FileText, Download, BookOpen } from '@wso2/oxygen-ui-icons-react'
 import { useNavigate, useParams } from 'react-router'
 import type { JSX } from 'react'

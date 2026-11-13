@@ -18,7 +18,12 @@
 
 import React from 'react';
 import type {Meta, StoryObj} from '@storybook/react';
-import {useColorScheme, Box, Button, Chip, Stack, Typography} from '@wso2/oxygen-ui';
+import { useColorScheme } from '@wso2/oxygen-ui/styles';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Chip from '@wso2/oxygen-ui/Chip';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
 import {Moon, Sun, Monitor} from '@wso2/oxygen-ui-icons-react';
 
 /**

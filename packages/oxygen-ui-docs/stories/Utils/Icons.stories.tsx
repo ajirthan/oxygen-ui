@@ -18,19 +18,17 @@
 
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Box,
-  Typography,
-  Paper,
-  Button,
-  SearchBar,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Chip,
-  Stack,
-} from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Button from '@wso2/oxygen-ui/Button';
+import SearchBar from '@wso2/oxygen-ui/SearchBar';
+import Dialog from '@wso2/oxygen-ui/Dialog';
+import DialogTitle from '@wso2/oxygen-ui/DialogTitle';
+import DialogContent from '@wso2/oxygen-ui/DialogContent';
+import DialogActions from '@wso2/oxygen-ui/DialogActions';
+import Chip from '@wso2/oxygen-ui/Chip';
+import Stack from '@wso2/oxygen-ui/Stack';
 import lucideReactPkg from 'lucide-react/package.json';
 import lucideTags from 'lucide-static/tags.json';
 import * as OxygenIcons from '@wso2/oxygen-ui-icons-react';

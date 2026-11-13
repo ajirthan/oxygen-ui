@@ -18,7 +18,9 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ImageList, ImageListItem, ImageListItemBar } from '@wso2/oxygen-ui';
+import ImageList from '@wso2/oxygen-ui/ImageList';
+import ImageListItem from '@wso2/oxygen-ui/ImageListItem';
+import ImageListItemBar from '@wso2/oxygen-ui/ImageListItemBar';
 
 /**
  * Image List displays a collection of images in an organized grid.

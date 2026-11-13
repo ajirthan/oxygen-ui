@@ -17,7 +17,11 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Modal, Box, Button, Paper, Typography } from '@wso2/oxygen-ui';
+import Modal from '@wso2/oxygen-ui/Modal';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Typography from '@wso2/oxygen-ui/Typography';
 import React, { useState } from 'react';
 
 /**

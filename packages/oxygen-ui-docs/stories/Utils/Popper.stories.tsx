@@ -18,7 +18,12 @@
 
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Popper, Button, Box, Fade, Paper, Typography } from '@wso2/oxygen-ui';
+import Popper from '@wso2/oxygen-ui/Popper';
+import Button from '@wso2/oxygen-ui/Button';
+import Box from '@wso2/oxygen-ui/Box';
+import Fade from '@wso2/oxygen-ui/Fade';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Typography from '@wso2/oxygen-ui/Typography';
 
 /**
  * Popper is a utility component for positioning content relative to an anchor element.

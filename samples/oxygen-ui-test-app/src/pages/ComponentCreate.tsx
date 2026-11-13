@@ -16,7 +16,12 @@
  * under the License.
  */
 
-import { Button, Divider, Form, PageTitle, PageContent, Stack } from '@wso2/oxygen-ui'
+import Button from '@wso2/oxygen-ui/Button'
+import Divider from '@wso2/oxygen-ui/Divider'
+import { Form } from '@wso2/oxygen-ui/Form'
+import PageTitle from '@wso2/oxygen-ui/PageTitle'
+import PageContent from '@wso2/oxygen-ui/PageContent'
+import Stack from '@wso2/oxygen-ui/Stack'
 import { useState, type JSX } from 'react'
 import { Link as NavigateLink, useParams } from 'react-router'
 import { ExternalLinkIcon, Import, Network, WSO2 } from '@wso2/oxygen-ui-icons-react'
