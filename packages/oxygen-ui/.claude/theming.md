@@ -24,16 +24,14 @@
 | Pale Indigo | `PaleIndigoTheme` | Soft indigo tones for a calm interface |
 
 ```tsx
-import {
-  OxygenTheme,
-  AcrylicOrangeTheme,
-  AcrylicPurpleTheme,
-  ClassicTheme,
-  HighContrastTheme,
-  PaleBaseTheme,
-  PaleGrayTheme,
-  PaleIndigoTheme,
-} from '@wso2/oxygen-ui';
+import OxygenTheme from '@wso2/oxygen-ui/OxygenTheme';
+import AcrylicOrangeTheme from '@wso2/oxygen-ui/AcrylicOrangeTheme';
+import AcrylicPurpleTheme from '@wso2/oxygen-ui/AcrylicPurpleTheme';
+import ClassicTheme from '@wso2/oxygen-ui/ClassicTheme';
+import HighContrastTheme from '@wso2/oxygen-ui/HighContrastTheme';
+import PaleBaseTheme from '@wso2/oxygen-ui/PaleBaseTheme';
+import PaleGrayTheme from '@wso2/oxygen-ui/PaleGrayTheme';
+import PaleIndigoTheme from '@wso2/oxygen-ui/PaleIndigoTheme';
 ```
 
 ---
@@ -42,7 +40,7 @@ import {
 
 ### Single Theme (Default)
 ```tsx
-import { OxygenUIThemeProvider } from '@wso2/oxygen-ui';
+import OxygenUIThemeProvider from '@wso2/oxygen-ui/OxygenUIThemeProvider';
 
 <OxygenUIThemeProvider>
   <App />
@@ -51,7 +49,8 @@ import { OxygenUIThemeProvider } from '@wso2/oxygen-ui';
 
 ### Single Custom Theme
 ```tsx
-import { OxygenUIThemeProvider, ClassicTheme } from '@wso2/oxygen-ui';
+import OxygenUIThemeProvider from '@wso2/oxygen-ui/OxygenUIThemeProvider';
+import ClassicTheme from '@wso2/oxygen-ui/ClassicTheme';
 
 <OxygenUIThemeProvider theme={ClassicTheme}>
   <App />
@@ -60,17 +59,15 @@ import { OxygenUIThemeProvider, ClassicTheme } from '@wso2/oxygen-ui';
 
 ### Multiple Themes with Switching
 ```tsx
-import {
-  OxygenUIThemeProvider,
-  OxygenTheme,
-  AcrylicOrangeTheme,
-  AcrylicPurpleTheme,
-  ClassicTheme,
-  HighContrastTheme,
-  PaleBaseTheme,
-  PaleGrayTheme,
-  PaleIndigoTheme,
-} from '@wso2/oxygen-ui';
+import OxygenUIThemeProvider from '@wso2/oxygen-ui/OxygenUIThemeProvider';
+import OxygenTheme from '@wso2/oxygen-ui/OxygenTheme';
+import AcrylicOrangeTheme from '@wso2/oxygen-ui/AcrylicOrangeTheme';
+import AcrylicPurpleTheme from '@wso2/oxygen-ui/AcrylicPurpleTheme';
+import ClassicTheme from '@wso2/oxygen-ui/ClassicTheme';
+import HighContrastTheme from '@wso2/oxygen-ui/HighContrastTheme';
+import PaleBaseTheme from '@wso2/oxygen-ui/PaleBaseTheme';
+import PaleGrayTheme from '@wso2/oxygen-ui/PaleGrayTheme';
+import PaleIndigoTheme from '@wso2/oxygen-ui/PaleIndigoTheme';
 
 <OxygenUIThemeProvider
   themes={[
@@ -169,7 +166,7 @@ theme.oxygen.syntax.dark.keyword
 
 ### Color Scheme Toggle
 ```tsx
-import { ColorSchemeToggle } from '@wso2/oxygen-ui';
+import ColorSchemeToggle from '@wso2/oxygen-ui/ColorSchemeToggle';
 
 // Cycles through: light → dark → system
 <ColorSchemeToggle />
@@ -177,7 +174,7 @@ import { ColorSchemeToggle } from '@wso2/oxygen-ui';
 
 ### Adaptive Images
 ```tsx
-import { ColorSchemeImage } from '@wso2/oxygen-ui';
+import ColorSchemeImage from '@wso2/oxygen-ui/ColorSchemeImage';
 
 <ColorSchemeImage
   light="/images/logo.svg"
@@ -188,7 +185,7 @@ import { ColorSchemeImage } from '@wso2/oxygen-ui';
 
 ### Programmatic Mode Access
 ```tsx
-import { useTheme } from '@wso2/oxygen-ui';
+import { useTheme } from '@wso2/oxygen-ui/styles';
 
 const theme = useTheme();
 const isDark = theme.palette.mode === 'dark';
@@ -196,7 +193,7 @@ const isDark = theme.palette.mode === 'dark';
 
 ### useThemeContent Hook
 ```tsx
-import { useThemeContent } from '@wso2/oxygen-ui';
+import useThemeContent from '@wso2/oxygen-ui/useThemeContent';
 
 const content = useThemeContent({
   light: 'Show this in light mode',
@@ -256,10 +253,10 @@ The theme uses `data-color-scheme` attribute for mode switching:
 ### Extending Base Theme
 ```tsx
 import { extendTheme } from '@mui/material/styles';
-import { OxygenThemeBase } from '@wso2/oxygen-ui';
+import OxygenTheme from '@wso2/oxygen-ui/OxygenTheme';
 
 const customTheme = extendTheme({
-  ...OxygenThemeBase,
+  ...OxygenTheme,
   colorSchemes: {
     light: {
       palette: {
@@ -286,7 +283,7 @@ const customTheme = extendTheme({
 ### Component Overrides
 ```tsx
 const customTheme = extendTheme({
-  ...OxygenThemeBase,
+  ...OxygenTheme,
   components: {
     MuiButton: {
       styleOverrides: {
@@ -309,7 +306,7 @@ const customTheme = extendTheme({
 
 ### Theme Switching in Components
 ```tsx
-import { useThemeSwitcher } from '@wso2/oxygen-ui';
+import { useThemeSwitcher } from '@wso2/oxygen-ui/OxygenUIThemeProvider';
 
 function ThemeSelector() {
   const { currentTheme, setTheme, themes } = useThemeSwitcher();

@@ -72,7 +72,7 @@ Example:
 
 ```tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '@wso2/oxygen-ui';
+import Button from '@wso2/oxygen-ui/Button';
 
 const meta: Meta<typeof Button> = {
   title: 'Inputs/Button',
