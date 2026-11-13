@@ -45,6 +45,7 @@ const rows: Row[] = [
   { name: 'Select', app: barrelImport('Select'), holds: [], gzipBudget: { rolldown: 53806, vite: 55013 } },
   { name: 'Header', app: barrelImport('Header'), holds: [], gzipBudget: { rolldown: 55822, vite: 57027 } },
   { name: 'AppShell', app: barrelImport('AppShell'), holds: [], gzipBudget: { rolldown: 28987, vite: 29466 } },
+  { name: 'ListingTable', app: barrelImport('ListingTable'), holds: [], gzipBudget: { rolldown: 88887, vite: 89959 } },
   { name: 'Button', app: barrelImport('Button'), holds: [], gzipBudget: { rolldown: 36975, vite: 37772 } },
   { name: 'OxygenUIThemeProvider', app: barrelImport('OxygenUIThemeProvider'), holds: ['Inter'], gzipBudget: { rolldown: 283886, vite: 285630 } },
   { name: 'only an Oxygen theme', app: barrelImport('AcrylicOrangeTheme'), holds: ['Inter'], gzipBudget: { rolldown: 265390, vite: 266090 } },
