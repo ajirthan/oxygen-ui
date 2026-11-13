@@ -119,19 +119,19 @@ Following Material-UI's responsive breakpoints:
 Design tokens can be accessed programmatically:
 
 ```typescript
-import { OxygenThemeBase } from '@wso2/oxygen-ui';
+import OxygenTheme from '@wso2/oxygen-ui/OxygenTheme';
 
 // Access color tokens
-const primaryColor = OxygenThemeBase.palette.primary.main; // #ff7300
+const primaryColor = OxygenTheme.palette.primary.main; // #ff7300
 
 // Access typography
-const baseFontSize = OxygenThemeBase.typography.fontSize; // 14
+const baseFontSize = OxygenTheme.typography.fontSize; // 14
 
 // Access spacing (function)
-const spacing = OxygenThemeBase.spacing(2); // '16px'
+const spacing = OxygenTheme.spacing(2); // '16px'
 
 // Access custom properties
-const blurMedium = OxygenThemeBase.blur.medium; // 'blur(16px)'
+const blurMedium = OxygenTheme.blur.medium; // 'blur(16px)'
 ```
 
 ### Creating Custom Themes
@@ -139,7 +139,8 @@ const blurMedium = OxygenThemeBase.blur.medium; // 'blur(16px)'
 Designers can collaborate with developers to create custom themes:
 
 ```typescript
-import { createOxygenTheme, OxygenThemeBase } from '@wso2/oxygen-ui';
+import { createOxygenTheme } from '@wso2/oxygen-ui/styles';
+import OxygenTheme from '@wso2/oxygen-ui/OxygenTheme';
 
 const CustomTheme = createOxygenTheme({
   colorSchemes: {
@@ -154,7 +155,7 @@ const CustomTheme = createOxygenTheme({
   shape: {
     borderRadius: 12, // Custom radius
   },
-}, OxygenThemeBase);
+}, OxygenTheme);
 ```
 
 ## Component States

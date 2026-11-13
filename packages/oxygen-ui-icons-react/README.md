@@ -54,7 +54,7 @@ Browse the complete collection at [lucide.dev/icons](https://lucide.dev/icons)
 ## Example with Material-UI
 
 ```jsx
-import { IconButton } from '@wso2/oxygen-ui';
+import IconButton from '@wso2/oxygen-ui/IconButton';
 import { Settings, LogOut } from '@wso2/oxygen-ui-icons-react';
 
 function Toolbar() {
