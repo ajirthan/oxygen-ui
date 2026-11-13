@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Snackbar, Button, Alert } from '@wso2/oxygen-ui';
+import Snackbar from '@wso2/oxygen-ui/Snackbar';
+import Button from '@wso2/oxygen-ui/Button';
+import Alert from '@wso2/oxygen-ui/Alert';
 import React, { useState } from 'react';
 
 /**

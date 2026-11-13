@@ -16,25 +16,23 @@
  * under the License.
  */
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  InputAdornment,
-  Chip,
-  Select,
-  MenuItem,
-  FormControl,
-  FormLabel,
-  Switch,
-  FormControlLabel,
-  Divider,
-  PageContent,
-  PageTitle,
-} from '@wso2/oxygen-ui'
+import Box from '@wso2/oxygen-ui/Box'
+import Button from '@wso2/oxygen-ui/Button'
+import Card from '@wso2/oxygen-ui/Card'
+import CardContent from '@wso2/oxygen-ui/CardContent'
+import Typography from '@wso2/oxygen-ui/Typography'
+import TextField from '@wso2/oxygen-ui/TextField'
+import InputAdornment from '@wso2/oxygen-ui/InputAdornment'
+import Chip from '@wso2/oxygen-ui/Chip'
+import Select from '@wso2/oxygen-ui/Select'
+import MenuItem from '@wso2/oxygen-ui/MenuItem'
+import FormControl from '@wso2/oxygen-ui/FormControl'
+import FormLabel from '@wso2/oxygen-ui/FormLabel'
+import Switch from '@wso2/oxygen-ui/Switch'
+import FormControlLabel from '@wso2/oxygen-ui/FormControlLabel'
+import Divider from '@wso2/oxygen-ui/Divider'
+import PageContent from '@wso2/oxygen-ui/PageContent'
+import PageTitle from '@wso2/oxygen-ui/PageTitle'
 import {
   Search,
   Download,

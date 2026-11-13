@@ -17,17 +17,15 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-    Box,
-    Button,
-    Drawer,
-    Divider,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText
-} from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Drawer from '@wso2/oxygen-ui/Drawer';
+import Divider from '@wso2/oxygen-ui/Divider';
+import List from '@wso2/oxygen-ui/List';
+import ListItem from '@wso2/oxygen-ui/ListItem';
+import ListItemButton from '@wso2/oxygen-ui/ListItemButton';
+import ListItemIcon from '@wso2/oxygen-ui/ListItemIcon';
+import ListItemText from '@wso2/oxygen-ui/ListItemText';
 import { Inbox, Star, Send, FileText, Mail, Trash2, TriangleAlert } from '@wso2/oxygen-ui-icons-react';
 import React, { useState } from 'react';
 

@@ -16,7 +16,8 @@
  * under the License.
  */
 
-import { Box, Form } from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import { Form } from '@wso2/oxygen-ui/Form';
 import type { JSX, ReactNode } from 'react';
 
 export interface SampleIntegrationsSectionProps {

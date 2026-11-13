@@ -17,24 +17,22 @@
  */
 
 import { Meta, StoryObj } from '@storybook/react';
-import {
-  Box,
-  Typography,
-  Button,
-  Grid,
-  Stack,
-  Divider,
-  Alert,
-  InputLabel,
-  OutlinedInput,
-  FormControlLabel,
-  Link,
-  Checkbox,
-  styled,
-  Paper,
-  ColorSchemeImage,
-  ParticleBackground,
-} from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Button from '@wso2/oxygen-ui/Button';
+import Grid from '@wso2/oxygen-ui/Grid';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Divider from '@wso2/oxygen-ui/Divider';
+import Alert from '@wso2/oxygen-ui/Alert';
+import InputLabel from '@wso2/oxygen-ui/InputLabel';
+import OutlinedInput from '@wso2/oxygen-ui/OutlinedInput';
+import FormControlLabel from '@wso2/oxygen-ui/FormControlLabel';
+import Link from '@wso2/oxygen-ui/Link';
+import Checkbox from '@wso2/oxygen-ui/Checkbox';
+import { styled } from '@wso2/oxygen-ui/styles';
+import Paper from '@wso2/oxygen-ui/Paper';
+import ColorSchemeImage from '@wso2/oxygen-ui/ColorSchemeImage';
+import ParticleBackground from '@wso2/oxygen-ui/ParticleBackground';
 import {Cloud, GitHub, Google, ShieldCheck, TerminalSquare, Zap} from '@wso2/oxygen-ui-icons-react';
 import React, {type JSX} from 'react';
 

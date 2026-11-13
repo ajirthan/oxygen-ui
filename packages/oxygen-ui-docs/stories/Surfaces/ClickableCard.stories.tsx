@@ -18,16 +18,14 @@
 
 import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import {
-  Button,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Typography,
-  Stack,
-  Tooltip,
-  Form,
-} from '@wso2/oxygen-ui'
+import Button from '@wso2/oxygen-ui/Button'
+import CardHeader from '@wso2/oxygen-ui/CardHeader'
+import CardContent from '@wso2/oxygen-ui/CardContent'
+import CardActions from '@wso2/oxygen-ui/CardActions'
+import Typography from '@wso2/oxygen-ui/Typography'
+import Stack from '@wso2/oxygen-ui/Stack'
+import Tooltip from '@wso2/oxygen-ui/Tooltip'
+import { Form } from '@wso2/oxygen-ui/Form'
 import {
   CircleQuestionMark,
   ArrowRightIcon,

@@ -18,7 +18,11 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { AppShell, Footer, Box, Sidebar, Typography } from '@wso2/oxygen-ui';
+import AppShell from '@wso2/oxygen-ui/AppShell';
+import Box from '@wso2/oxygen-ui/Box';
+import Footer from '@wso2/oxygen-ui/Footer';
+import Sidebar from '@wso2/oxygen-ui/Sidebar';
+import Typography from '@wso2/oxygen-ui/Typography';
 import { FolderOpen } from '@wso2/oxygen-ui-icons-react';
 
 /**

@@ -18,7 +18,8 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Sidebar, Box } from '@wso2/oxygen-ui';
+import Sidebar from '@wso2/oxygen-ui/Sidebar';
+import Box from '@wso2/oxygen-ui/Box';
 import {
   Home,
   BarChart3,

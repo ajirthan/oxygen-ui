@@ -17,7 +17,10 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { CircularProgress, LinearProgress, Stack, Box } from '@wso2/oxygen-ui';
+import CircularProgress from '@wso2/oxygen-ui/CircularProgress';
+import LinearProgress from '@wso2/oxygen-ui/LinearProgress';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Box from '@wso2/oxygen-ui/Box';
 import React from 'react';
 
 /**

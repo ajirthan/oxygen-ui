@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Skeleton, Stack, Box } from '@wso2/oxygen-ui';
+import Skeleton from '@wso2/oxygen-ui/Skeleton';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Box from '@wso2/oxygen-ui/Box';
 import React from 'react';
 
 /**

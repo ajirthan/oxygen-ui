@@ -17,7 +17,12 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Box, Typography, Paper, Stack, colors, CodeBlock } from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Stack from '@wso2/oxygen-ui/Stack';
+import * as colors from '@wso2/oxygen-ui/colors';
+import CodeBlock from '@wso2/oxygen-ui/CodeBlock';
 import React from 'react';
 
 /**

@@ -16,7 +16,8 @@
  * under the License.
  */
 
-import { Box, Typography } from '@wso2/oxygen-ui'
+import Box from '@wso2/oxygen-ui/Box'
+import Typography from '@wso2/oxygen-ui/Typography'
 import type { JSX, ReactNode } from 'react'
 
 interface PageTitleProps {

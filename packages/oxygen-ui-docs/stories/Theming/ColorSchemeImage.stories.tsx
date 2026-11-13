@@ -18,7 +18,12 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ColorSchemeImage, ColorSchemeToggle, Stack, Typography, Paper, Box } from '@wso2/oxygen-ui';
+import ColorSchemeImage from '@wso2/oxygen-ui/ColorSchemeImage';
+import ColorSchemeToggle from '@wso2/oxygen-ui/ColorSchemeToggle';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Paper from '@wso2/oxygen-ui/Paper';
+import Box from '@wso2/oxygen-ui/Box';
 
 const meta: Meta<typeof ColorSchemeImage> = {
   title: 'Theming/ColorSchemeImage',

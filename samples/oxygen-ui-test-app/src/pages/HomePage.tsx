@@ -16,7 +16,13 @@
  * under the License.
  */
 
-import { Badge, Box, Button, Divider, Link, Stack, Typography } from '@wso2/oxygen-ui'
+import Badge from '@wso2/oxygen-ui/Badge'
+import Box from '@wso2/oxygen-ui/Box'
+import Button from '@wso2/oxygen-ui/Button'
+import Divider from '@wso2/oxygen-ui/Divider'
+import Link from '@wso2/oxygen-ui/Link'
+import Stack from '@wso2/oxygen-ui/Stack'
+import Typography from '@wso2/oxygen-ui/Typography'
 import { useState, type JSX } from 'react'
 import { Link as NavigateLink } from 'react-router'
 import reactLogo from '/react.svg'

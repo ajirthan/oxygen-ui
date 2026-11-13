@@ -17,8 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { CodeBlock } from '@wso2/oxygen-ui';
-import { Stack, Typography } from '@wso2/oxygen-ui';
+import CodeBlock from '@wso2/oxygen-ui/CodeBlock';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
 import React from 'react';
 
 const meta: Meta<typeof CodeBlock> = {

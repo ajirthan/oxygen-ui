@@ -16,21 +16,19 @@
  * under the License.
  */
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardActions,
-  Grid,
-  PageContent,
-  PageTitle,
-  Typography,
-  TextField,
-  InputAdornment,
-  Chip,
-  IconButton,
-} from '@wso2/oxygen-ui'
+import Box from '@wso2/oxygen-ui/Box'
+import Button from '@wso2/oxygen-ui/Button'
+import Card from '@wso2/oxygen-ui/Card'
+import CardContent from '@wso2/oxygen-ui/CardContent'
+import CardActions from '@wso2/oxygen-ui/CardActions'
+import Grid from '@wso2/oxygen-ui/Grid'
+import PageContent from '@wso2/oxygen-ui/PageContent'
+import PageTitle from '@wso2/oxygen-ui/PageTitle'
+import Typography from '@wso2/oxygen-ui/Typography'
+import TextField from '@wso2/oxygen-ui/TextField'
+import InputAdornment from '@wso2/oxygen-ui/InputAdornment'
+import Chip from '@wso2/oxygen-ui/Chip'
+import IconButton from '@wso2/oxygen-ui/IconButton'
 import { Search, Plus, MoreVertical, Folder } from '@wso2/oxygen-ui-icons-react'
 import { useNavigate, useParams } from 'react-router'
 import { useState, type JSX } from 'react'

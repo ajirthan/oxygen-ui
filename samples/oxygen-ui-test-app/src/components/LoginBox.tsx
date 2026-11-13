@@ -17,20 +17,18 @@
  */
 
 import { useState, type JSX } from 'react';
-import {
-  Alert,
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  Link,
-  OutlinedInput,
-  Typography
-} from '@wso2/oxygen-ui';
+import Alert from '@wso2/oxygen-ui/Alert';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Checkbox from '@wso2/oxygen-ui/Checkbox';
+import Divider from '@wso2/oxygen-ui/Divider';
+import FormControlLabel from '@wso2/oxygen-ui/FormControlLabel';
+import IconButton from '@wso2/oxygen-ui/IconButton';
+import InputAdornment from '@wso2/oxygen-ui/InputAdornment';
+import InputLabel from '@wso2/oxygen-ui/InputLabel';
+import Link from '@wso2/oxygen-ui/Link';
+import OutlinedInput from '@wso2/oxygen-ui/OutlinedInput';
+import Typography from '@wso2/oxygen-ui/Typography';
 import { Eye, EyeOff, GitHub, Google } from '@wso2/oxygen-ui-icons-react'
 import {useNavigate} from 'react-router';
 

@@ -17,7 +17,8 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { TrialBadge, Stack } from '@wso2/oxygen-ui';
+import TrialBadge from '@wso2/oxygen-ui/TrialBadge';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React from 'react';
 
 /**

@@ -17,7 +17,8 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Typography, Stack } from '@wso2/oxygen-ui';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React from 'react';
 
 /**

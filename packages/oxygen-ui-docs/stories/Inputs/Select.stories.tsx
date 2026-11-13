@@ -18,8 +18,11 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Select, MenuItem, FormControl, InputLabel } from '@wso2/oxygen-ui';
-import type { SelectProps } from '@wso2/oxygen-ui';
+import Select from '@wso2/oxygen-ui/Select';
+import MenuItem from '@wso2/oxygen-ui/MenuItem';
+import FormControl from '@wso2/oxygen-ui/FormControl';
+import InputLabel from '@wso2/oxygen-ui/InputLabel';
+import type { SelectProps } from '@wso2/oxygen-ui/Select';
 import { useId, useState } from 'react';
 
 const meta: Meta<typeof Select> = {

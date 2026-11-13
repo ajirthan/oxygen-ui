@@ -17,7 +17,11 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Stack } from '@wso2/oxygen-ui';
+import Accordion from '@wso2/oxygen-ui/Accordion';
+import AccordionSummary from '@wso2/oxygen-ui/AccordionSummary';
+import AccordionDetails from '@wso2/oxygen-ui/AccordionDetails';
+import Typography from '@wso2/oxygen-ui/Typography';
+import Stack from '@wso2/oxygen-ui/Stack';
 import { ChevronDown, Minus, Plus } from '@wso2/oxygen-ui-icons-react';
 import React from 'react';
 

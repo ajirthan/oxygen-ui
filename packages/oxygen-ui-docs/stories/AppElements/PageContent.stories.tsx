@@ -17,7 +17,14 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { AppShell, PageContent, Card, CardContent, Typography, Box, Footer, Sidebar } from '@wso2/oxygen-ui';
+import AppShell from '@wso2/oxygen-ui/AppShell';
+import Box from '@wso2/oxygen-ui/Box';
+import Card from '@wso2/oxygen-ui/Card';
+import CardContent from '@wso2/oxygen-ui/CardContent';
+import Footer from '@wso2/oxygen-ui/Footer';
+import PageContent from '@wso2/oxygen-ui/PageContent';
+import Sidebar from '@wso2/oxygen-ui/Sidebar';
+import Typography from '@wso2/oxygen-ui/Typography';
 import { FolderOpen } from '@wso2/oxygen-ui-icons-react';
 import React from 'react';
 

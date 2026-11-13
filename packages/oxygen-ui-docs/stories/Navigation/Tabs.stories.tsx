@@ -17,7 +17,10 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Tabs, Tab, Box, Typography } from '@wso2/oxygen-ui';
+import Tabs from '@wso2/oxygen-ui/Tabs';
+import Tab from '@wso2/oxygen-ui/Tab';
+import Box from '@wso2/oxygen-ui/Box';
+import Typography from '@wso2/oxygen-ui/Typography';
 import React, { useState } from 'react';
 
 /**

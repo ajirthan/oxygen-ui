@@ -18,7 +18,12 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@wso2/oxygen-ui';
+import Dialog from '@wso2/oxygen-ui/Dialog';
+import DialogTitle from '@wso2/oxygen-ui/DialogTitle';
+import DialogContent from '@wso2/oxygen-ui/DialogContent';
+import DialogContentText from '@wso2/oxygen-ui/DialogContentText';
+import DialogActions from '@wso2/oxygen-ui/DialogActions';
+import Button from '@wso2/oxygen-ui/Button';
 import { useState } from 'react';
 
 const meta: Meta<typeof Dialog> = {

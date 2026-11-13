@@ -17,7 +17,13 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Box, Button, Stepper, Step, StepLabel, StepContent, Typography } from '@wso2/oxygen-ui';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Stepper from '@wso2/oxygen-ui/Stepper';
+import Step from '@wso2/oxygen-ui/Step';
+import StepLabel from '@wso2/oxygen-ui/StepLabel';
+import StepContent from '@wso2/oxygen-ui/StepContent';
+import Typography from '@wso2/oxygen-ui/Typography';
 import React, { useState } from 'react';
 
 /**

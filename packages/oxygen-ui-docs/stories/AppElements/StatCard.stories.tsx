@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { StatCard, Box, Grid } from '@wso2/oxygen-ui';
+import StatCard from '@wso2/oxygen-ui/StatCard';
+import Box from '@wso2/oxygen-ui/Box';
+import Grid from '@wso2/oxygen-ui/Grid';
 import {
   Users,
   TrendingUp,

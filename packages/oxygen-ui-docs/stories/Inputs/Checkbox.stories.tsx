@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Checkbox, FormControlLabel, FormGroup } from '@wso2/oxygen-ui';
+import Checkbox from '@wso2/oxygen-ui/Checkbox';
+import FormControlLabel from '@wso2/oxygen-ui/FormControlLabel';
+import FormGroup from '@wso2/oxygen-ui/FormGroup';
 import React, { useState } from 'react';
 
 /**

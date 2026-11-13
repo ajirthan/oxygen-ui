@@ -18,16 +18,14 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Header,
-  ColorSchemeToggle,
-  IconButton,
-  Badge,
-  Divider,
-  Tooltip,
-  Box,
-  ComplexSelect,
-} from '@wso2/oxygen-ui';
+import Header from '@wso2/oxygen-ui/Header';
+import ColorSchemeToggle from '@wso2/oxygen-ui/ColorSchemeToggle';
+import IconButton from '@wso2/oxygen-ui/IconButton';
+import Badge from '@wso2/oxygen-ui/Badge';
+import Divider from '@wso2/oxygen-ui/Divider';
+import Tooltip from '@wso2/oxygen-ui/Tooltip';
+import Box from '@wso2/oxygen-ui/Box';
+import ComplexSelect from '@wso2/oxygen-ui/ComplexSelect';
 import {
   Zap,
   Bell,

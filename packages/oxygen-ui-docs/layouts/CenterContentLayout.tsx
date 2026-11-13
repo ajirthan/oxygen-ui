@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import {Box} from "@wso2/oxygen-ui";
+import Box from "@wso2/oxygen-ui/Box";
 import React from 'react';
 import type {JSX} from "react";
 

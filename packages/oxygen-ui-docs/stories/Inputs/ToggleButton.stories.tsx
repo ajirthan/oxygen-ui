@@ -17,7 +17,9 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { ToggleButton, ToggleButtonGroup, Stack } from '@wso2/oxygen-ui';
+import ToggleButton from '@wso2/oxygen-ui/ToggleButton';
+import ToggleButtonGroup from '@wso2/oxygen-ui/ToggleButtonGroup';
+import Stack from '@wso2/oxygen-ui/Stack';
 import React, { useState } from 'react';
 
 /**
