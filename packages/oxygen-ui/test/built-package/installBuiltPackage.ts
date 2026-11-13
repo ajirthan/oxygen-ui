@@ -56,6 +56,7 @@ export type Marker = keyof typeof markerCode;
 
 export type Bundler = 'rolldown' | 'vite';
 
+/** What the app's initial chunks hold; a chunk that only a dynamic import loads is left out. */
 interface BundleReport {
   gzipBytes: number;
   markers: Marker[];
@@ -88,6 +89,24 @@ interface Chunk {
   code: string;
   exports: string[];
   isEntry: boolean;
+  fileName: string;
+  /** The chunks this one imports statically; a dynamic import is not among them. */
+  imports: string[];
+}
+
+/** What a browser fetches before the app runs: the entry chunks and what they import statically, however deep. */
+function initialChunks(chunks: Chunk[]): Chunk[] {
+  const byName = new Map(chunks.map(chunk => [chunk.fileName, chunk]));
+  const initial = new Set<Chunk>();
+  const pending = chunks.filter(chunk => chunk.isEntry);
+
+  for (let chunk = pending.pop(); chunk; chunk = pending.pop()) {
+    if (initial.has(chunk)) continue;
+    initial.add(chunk);
+    pending.push(...chunk.imports.flatMap(name => byName.get(name) ?? []));
+  }
+
+  return [...initial];
 }
 
 type Bundle = (appRoot: string, entry: string) => Promise<Chunk[]>;
@@ -209,7 +228,7 @@ export function installBuiltPackage(): InstalledPackage {
   return {
     async bundle(appSource, bundler) {
       const chunks = await bundleApp(appSource, bundler);
-      const code = chunks.map(chunk => chunk.code).join('\n');
+      const code = initialChunks(chunks).map(chunk => chunk.code).join('\n');
       const markers = (Object.keys(markerCode) as Marker[]).filter(marker => code.includes(markerCode[marker]));
 
       return { gzipBytes: gzipSync(code).length, markers };
@@ -222,11 +241,16 @@ export function installBuiltPackage(): InstalledPackage {
       if (!entry) throw new Error('The app bundled to no entry chunk.');
 
       appCount += 1;
-      const bundled = join(appRoot, `bundled-${appCount}.mjs`);
+      const bundledDirectory = join(appRoot, `bundled-${appCount}`);
 
-      writeFileSync(bundled, entry.code);
+      for (const chunk of chunks) {
+        const file = join(bundledDirectory, chunk.fileName);
 
-      return import(/* @vite-ignore */ pathToFileURL(bundled).href);
+        mkdirSync(dirname(file), { recursive: true });
+        writeFileSync(file, chunk.code);
+      }
+
+      return import(/* @vite-ignore */ pathToFileURL(join(bundledDirectory, entry.fileName)).href);
     },
     typeCheck(appSource, moduleResolution) {
       const consumer = join(appRoot, 'consumer.mts');
