@@ -71,6 +71,9 @@ The autofix writes path imports:
 - A Material UI path import such as `@mui/material/Button` keeps its imports and moves to `@wso2/oxygen-ui/Button`.
 - An import from `@mui/material` becomes one import per Oxygen path. It uses the name-to-path map (`@wso2/oxygen-ui/path-map.json`) of the Oxygen version installed in your app, the same map the codemod uses. If that version has no map, or a name is not in it, the import is reported and left for you to fix.
 - An MUI X import moves to the matching lower-case Oxygen path.
+- Type-only names stay type-only, and a file without semicolons stays without them.
+
+Every fix needs the path map of the installed Oxygen version, and a path import must exist there: a Material UI path the installed version does not have, or a named import that is not on that path, is reported and left for you to fix. The fix is also skipped when the nearest `tsconfig.json` sets `moduleResolution` to `node`, `node10` or `classic`, or sets `module` to `commonjs` without a `moduleResolution`, because those settings cannot resolve path imports. An import with a comment inside it is reported and left alone. An MUI X package that has no Oxygen path, such as `@mui/x-charts`, is reported with a message that says so.
 
 **Options:**
 - `suggestedPackage` (string): The package whose paths the fix writes (default: '@wso2/oxygen-ui')

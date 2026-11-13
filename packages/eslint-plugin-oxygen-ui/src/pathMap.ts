@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import {existsSync, readFileSync} from 'node:fs';
+import {existsSync, readFileSync, statSync} from 'node:fs';
 import path from 'node:path';
 
 export interface PathMapEntry {
@@ -31,7 +31,7 @@ export const OXYGEN_PACKAGE = '@wso2/oxygen-ui';
 
 const MAP_EXPORT = './path-map.json';
 
-const cache = new Map<string, PathMap | undefined>();
+const cache = new Map<string, {modified: number; map: PathMap}>();
 
 const findInstalledPackage = (from: string): string | undefined => {
   for (let dir = path.resolve(from); ; dir = path.dirname(dir)) {
@@ -46,16 +46,60 @@ const loadPathMap = (from: string): PathMap | undefined => {
   if (!packageDirectory) return undefined;
   try {
     const manifest = JSON.parse(readFileSync(path.join(packageDirectory, 'package.json'), 'utf8'));
-    const mapFile: unknown = manifest.exports?.[MAP_EXPORT];
-    if (typeof mapFile !== 'string') return undefined;
-    return JSON.parse(readFileSync(path.join(packageDirectory, mapFile), 'utf8'));
+    const exported: unknown = manifest.exports?.[MAP_EXPORT];
+    if (typeof exported !== 'string') return undefined;
+    const mapFile = path.join(packageDirectory, exported);
+    const modified = statSync(mapFile).mtimeMs;
+    const cached = cache.get(mapFile);
+    if (cached?.modified === modified) return cached.map;
+    const map: PathMap = JSON.parse(readFileSync(mapFile, 'utf8'));
+    cache.set(mapFile, {modified, map});
+    return map;
   } catch {
     return undefined;
   }
 };
 
-/** The name-to-path map of the Oxygen package installed next to the linted file, if it publishes one. */
-export const readInstalledPathMap = (fromDirectory: string): PathMap | undefined => {
-  if (!cache.has(fromDirectory)) cache.set(fromDirectory, loadPathMap(fromDirectory));
-  return cache.get(fromDirectory);
+export const readInstalledPathMap = (fromDirectory: string): PathMap | undefined => loadPathMap(fromDirectory);
+
+export const oxygenSubpathsIn = (map: PathMap): Set<string> =>
+  new Set(Object.values(map).map((entry) => entry.path.slice(OXYGEN_PACKAGE.length + 1)));
+
+const LEGACY_RESOLUTIONS = new Set(['node', 'node10', 'classic']);
+const LEGACY_MODULES = new Set(['commonjs', 'amd', 'umd', 'system', 'none']);
+
+const parseTsconfig = (file: string): {compilerOptions?: Record<string, unknown>; extends?: unknown} | undefined => {
+  try {
+    const text = readFileSync(file, 'utf8')
+      .replace(/("(?:\\.|[^"\\])*")|\/\/.*|\/\*[\s\S]*?\*\//g, '$1')
+      .replace(/,(\s*[}\]])/g, '$1');
+    return JSON.parse(text);
+  } catch {
+    return undefined;
+  }
+};
+
+const compilerOption = (file: string, name: string, visited = new Set<string>()): unknown => {
+  if (visited.has(file)) return undefined;
+  visited.add(file);
+  const config = parseTsconfig(file);
+  if (!config) return undefined;
+  const own = config.compilerOptions?.[name];
+  if (own !== undefined) return own;
+  if (typeof config.extends !== 'string' || !config.extends.startsWith('.')) return undefined;
+  const parent = path.resolve(path.dirname(file), config.extends);
+  return compilerOption(parent.endsWith('.json') ? parent : `${parent}.json`, name, visited);
+};
+
+export const resolvesPathImports = (fromDirectory: string): boolean => {
+  for (let dir = path.resolve(fromDirectory); ; dir = path.dirname(dir)) {
+    const tsconfig = path.join(dir, 'tsconfig.json');
+    if (existsSync(tsconfig)) {
+      const resolution = compilerOption(tsconfig, 'moduleResolution');
+      if (typeof resolution === 'string') return !LEGACY_RESOLUTIONS.has(resolution.toLowerCase());
+      const module = compilerOption(tsconfig, 'module');
+      return !(typeof module === 'string' && LEGACY_MODULES.has(module.toLowerCase()));
+    }
+    if (path.dirname(dir) === dir) return true;
+  }
 };

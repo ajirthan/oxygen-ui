@@ -19,7 +19,7 @@
 import path from 'node:path';
 import type {Rule} from 'eslint';
 import type {ImportDeclaration, ImportSpecifier} from 'estree';
-import {OXYGEN_PACKAGE, readInstalledPathMap, type PathMap} from '../pathMap.js';
+import {OXYGEN_PACKAGE, oxygenSubpathsIn, readInstalledPathMap, resolvesPathImports, type PathMap} from '../pathMap.js';
 
 interface NoDirectMuiImportsOptions {
   allowedPackages?: string[];
@@ -53,35 +53,68 @@ const isPlainNamedValueImport = (node: ImportDeclaration): node is ImportDeclara
   );
 
 /** One import per Oxygen path for the names of `import {…} from '@mui/material'`, or undefined when a name has no path. */
+const specifierText = (imported: string, local: string): string =>
+  imported === local ? imported : `${imported} as ${local}`;
+
+interface PathGroup {
+  typeOnly: boolean;
+  main?: string;
+  named: string[];
+}
+
+const statementsFor = (target: string, group: PathGroup, quote: string, terminator: string): string[] => {
+  const from = `from ${quote}${target}${quote}${terminator}`;
+  if (!group.typeOnly) {
+    const parts = [group.main, group.named.length > 0 ? `{${group.named.join(', ')}}` : undefined];
+    return [`import ${parts.filter(Boolean).join(', ')} ${from}`];
+  }
+  const statements: string[] = [];
+  if (group.main) statements.push(`import type ${group.main} ${from}`);
+  if (group.named.length > 0) statements.push(`import type {${group.named.join(', ')}} ${from}`);
+  return statements;
+};
+
 const pathImportsForMaterialRoot = (
   node: ImportDeclaration,
   map: PathMap,
   suggestedPackage: string,
   quote: string,
+  terminator: string,
 ): string | undefined => {
   if (!isPlainNamedValueImport(node)) return undefined;
 
-  const byPath = new Map<string, {main?: string; named: string[]}>();
+  const byPath = new Map<string, PathGroup>();
   for (const specifier of node.specifiers) {
     const imported = specifier.imported.type === 'Identifier' ? specifier.imported.name : String(specifier.imported.value);
     const entry = map[imported];
     if (!entry || entry.kind === 'namespace') return undefined;
 
     const target = suggestedPackage + entry.path.slice(OXYGEN_PACKAGE.length);
-    const group = byPath.get(target) ?? {named: []};
+    const key = `${target}|${entry.typeOnly}`;
+    const group = byPath.get(key) ?? {typeOnly: entry.typeOnly, named: []};
     const local = specifier.local.name;
     if (entry.kind === 'default' && group.main === undefined) group.main = local;
     else if (entry.kind === 'default') group.named.push(`default as ${local}`);
-    else group.named.push(imported === local ? imported : `${imported} as ${local}`);
-    byPath.set(target, group);
+    else group.named.push(specifierText(imported, local));
+    byPath.set(key, group);
   }
 
   return [...byPath]
-    .map(([target, {main, named}]) => {
-      const parts = [main, named.length > 0 ? `{${named.join(', ')}}` : undefined];
-      return `import ${parts.filter(Boolean).join(', ')} from ${quote}${target}${quote};`;
-    })
+    .flatMap(([key, group]) => statementsFor(key.slice(0, key.lastIndexOf('|')), group, quote, terminator))
     .join('\n');
+};
+
+const namesLiveOnPath = (node: ImportDeclaration, map: PathMap, subpath: string): boolean =>
+  node.specifiers.every(
+    (specifier) =>
+      specifier.type !== 'ImportSpecifier' ||
+      map[specifier.imported.type === 'Identifier' ? specifier.imported.name : String(specifier.imported.value)]?.path ===
+        `${OXYGEN_PACKAGE}/${subpath}`,
+  );
+
+const subpathFix = (node: ImportDeclaration, map: PathMap, subpath: string, importSource: string): boolean => {
+  if (!oxygenSubpathsIn(map).has(subpath)) return false;
+  return importSource.startsWith('@mui/x-') || namesLiveOnPath(node, map, subpath);
 };
 
 const noDirectMuiImportsRule: Rule.RuleModule = {
@@ -115,6 +148,8 @@ const noDirectMuiImportsRule: Rule.RuleModule = {
         "Direct imports from MUI packages are not allowed. Use '{{suggestedPackage}}' instead to import Material-UI components.",
       noDirectMuiSubpathImport:
         "Direct imports from '{{source}}' are not allowed. Use '{{suggestedPackage}}' instead.",
+      noDirectMuiXUnavailable:
+        "Direct imports from '{{source}}' are not allowed, but Oxygen UI has no path for this package. Add it to allowedPackages to allow it.",
       noDirectMuiXImport:
         "Direct imports from '{{source}}' are not allowed. Use the Oxygen path '{{suggestedPath}}' instead.",
     },
@@ -124,6 +159,7 @@ const noDirectMuiImportsRule: Rule.RuleModule = {
     const allowedPackages: string[] = options.allowedPackages ?? [];
     const suggestedPackage: string = options.suggestedPackage ?? OXYGEN_PACKAGE;
     const lintedDirectory = path.dirname(context.filename ?? context.getFilename());
+    const sourceCode = context.sourceCode ?? context.getSourceCode();
 
     return {
       ImportDeclaration(node: ImportDeclaration) {
@@ -145,18 +181,32 @@ const noDirectMuiImportsRule: Rule.RuleModule = {
 
         context.report({
           node: node.source,
-          messageId: isMuiX && suggestedPath ? 'noDirectMuiXImport' : hasSubpath ? 'noDirectMuiSubpathImport' : 'noDirectMuiImport',
+          messageId: isMuiX
+            ? suggestedPath
+              ? 'noDirectMuiXImport'
+              : 'noDirectMuiXUnavailable'
+            : hasSubpath
+              ? 'noDirectMuiSubpathImport'
+              : 'noDirectMuiImport',
           data: {
             source: importSource,
             suggestedPackage: suggestedPath ?? suggestedPackage,
             suggestedPath: suggestedPath ?? suggestedPackage,
           },
           fix(fixer: Rule.RuleFixer) {
-            if (suggestedPath) return fixer.replaceText(node.source, `${quote}${suggestedPath}${quote}`);
+            if (sourceCode.getCommentsInside(node).length > 0 || !resolvesPathImports(lintedDirectory)) return null;
+            const map = readInstalledPathMap(lintedDirectory);
+            if (!map) return null;
+
+            if (subpath && suggestedPath) {
+              return subpathFix(node, map, subpath, importSource)
+                ? fixer.replaceText(node.source, `${quote}${suggestedPath}${quote}`)
+                : null;
+            }
 
             if (importSource === '@mui/material') {
-              const map = readInstalledPathMap(lintedDirectory);
-              const replacement = map && pathImportsForMaterialRoot(node, map, suggestedPackage, quote);
+              const terminator = sourceCode.getText(node).trimEnd().endsWith(';') ? ';' : '';
+              const replacement = pathImportsForMaterialRoot(node, map, suggestedPackage, quote, terminator);
               return replacement ? fixer.replaceText(node, replacement) : null;
             }
             return null;
