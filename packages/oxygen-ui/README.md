@@ -12,7 +12,7 @@ yarn add @wso2/oxygen-ui @emotion/react @emotion/styled @mui/material
 pnpm add @wso2/oxygen-ui @emotion/react @emotion/styled @mui/material
 ```
 
-**Note:** The Inter Variable font is bundled and loads with any Oxygen theme, and the Sora Variable font loads with the default theme. No additional setup required, whichever way you import.
+**Note:** The Inter Variable and Sora Variable fonts are bundled and load with any Oxygen theme. No additional setup required, whichever way you import.
 
 ### Peer Dependencies
 
@@ -44,7 +44,7 @@ Path imports need `moduleResolution` set to `bundler`, `node16` or `nodenext` in
 | Path | Gives |
 | --- | --- |
 | `@wso2/oxygen-ui/<Component>` | An Oxygen component or a re-exported Material UI component, with its parts, hook and types |
-| `@wso2/oxygen-ui/<ThemeName>` | One theme as the default export, such as `OxygenTheme` or `ChoreoLabsTheme` |
+| `@wso2/oxygen-ui/<ThemeName>` | One theme as the default export, such as `OxygenTheme` or `AcrylicOrangeTheme` |
 | `@wso2/oxygen-ui/OxygenUIThemeProvider` | The provider, plus `useThemeSwitcher`, its types and `createEmotionCache` |
 | `@wso2/oxygen-ui/useAppShell`, `useNotifications`, `useThemeContent` | One shared hook |
 | `@wso2/oxygen-ui/styles` | Material UI's `styles`, plus `createOxygenTheme`, `pxToRem` and `OxygenThemeType` |
@@ -423,7 +423,7 @@ Loading themes from URLs (`themes: [{ key: 'x', label: 'X', theme: '/themes/x.js
 ### Custom Oxygen UI Components
 
 - `OxygenTheme` - Default theme configuration
-- `AcrylicOrangeTheme`, `AcrylicPurpleTheme`, `ChoreoLabsTheme`, `ClassicTheme`, `HighContrastTheme`, `PaleBaseTheme`, `PaleGrayTheme`, `PaleIndigoTheme` - Alternative themes
+- `AcrylicOrangeTheme`, `AcrylicPurpleTheme`, `ClassicTheme`, `HighContrastTheme`, `PaleBaseTheme`, `PaleGrayTheme`, `PaleIndigoTheme` - Alternative themes
 - `OxygenUIThemeProvider` - Theme provider component with theme switching support
 - `ThemeSwitcher` - Theme selection component (default select dropdown or render props)
 - `ThemeSelect` - Standalone theme select dropdown component

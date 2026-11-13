@@ -18,24 +18,13 @@
 
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Avatar,
-  Box,
-  Button,
-  Header,
-  HeaderBreadcrumbs,
-  Stack,
-  Typography,
-  clearHeaderBreadcrumbsState,
-  readHeaderBreadcrumbsState,
-  subscribeHeaderBreadcrumbsState,
-  useHeaderBreadcrumbs,
-  useHeaderBreadcrumbsValue,
-  type HeaderBreadcrumbsStoredState,
-  type HeaderBreadcrumbsItem,
-  type HeaderBreadcrumbsLevelConfig,
-  type HeaderBreadcrumbsValue,
-} from '@wso2/oxygen-ui';
+import Avatar from '@wso2/oxygen-ui/Avatar';
+import Box from '@wso2/oxygen-ui/Box';
+import Button from '@wso2/oxygen-ui/Button';
+import Header from '@wso2/oxygen-ui/Header';
+import HeaderBreadcrumbs, { clearHeaderBreadcrumbsState, readHeaderBreadcrumbsState, subscribeHeaderBreadcrumbsState, useHeaderBreadcrumbs, useHeaderBreadcrumbsValue, type HeaderBreadcrumbsStoredState, type HeaderBreadcrumbsItem, type HeaderBreadcrumbsLevelConfig, type HeaderBreadcrumbsValue } from '@wso2/oxygen-ui/HeaderBreadcrumbs';
+import Stack from '@wso2/oxygen-ui/Stack';
+import Typography from '@wso2/oxygen-ui/Typography';
 import { Box as BoxIcon, Building2, Plus, ScrollText } from '@wso2/oxygen-ui-icons-react';
 // Storybook's indexer fails to parse a JSX tag named `WSO2`.
 import { WSO2 as Wso2Logo } from '@wso2/oxygen-ui-icons-react';
